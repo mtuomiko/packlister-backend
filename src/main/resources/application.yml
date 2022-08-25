@@ -1,11 +1,16 @@
 spring:
   datasource:
-    url: 'jdbc:postgresql://localhost:5432/packlister'
-    username: postgres
-    password: Hunter2
+    url: ${DATABASE_CONNECTION_URL}
+    username: ${DATABASE_CONNECTION_USERNAME}
+    password: ${DATABASE_CONNECTION_PASSWORD}
   jpa:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   flyway:
     defaultSchema: packlister
+management:
+  endpoint:
+    enabled-by-default: false
+    health:
+      enabled: true

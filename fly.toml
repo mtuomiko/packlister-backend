@@ -1,0 +1,46 @@
+# fly.toml file generated for packlister on 2022-08-25T22:19:29+03:00
+
+app = "packlister"
+kill_signal = "SIGINT"
+kill_timeout = 5
+processes = []
+
+[env]
+
+[experimental]
+  allowed_public_ports = []
+  auto_rollback = true
+
+[[services]]
+  internal_port = 8080
+  processes = ["app"]
+  protocol = "tcp"
+  script_checks = []
+  [services.concurrency]
+    hard_limit = 25
+    soft_limit = 20
+    type = "connections"
+
+  [[services.ports]]
+    force_https = true
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
+
+  [[services.tcp_checks]]
+    grace_period = "5s"
+    interval = "1000s" # longest allowed
+    restart_limit = 0
+    timeout = "5s"
+
+  [[services.http_checks]]
+    interval = "1000s" # longest allowed
+    grace_period = "10s"
+    method = "get"
+    path = "/actuator/health"
+    protocol = "http"
+    restart_limit = 0
+    timeout = "5s"
