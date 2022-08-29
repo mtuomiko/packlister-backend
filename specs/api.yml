@@ -1,0 +1,97 @@
+openapi: 3.0.3
+info:
+  title: Packlister API
+  description: |-
+    Packlister server API specification in OpenAPI 3.0 format. Used within this project for autogenerating
+    Java Spring controllers code for the API level implementation..
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+tags:
+  - name: packlists
+    description: Operations for handling packlists
+  - name: items
+    description: Operations for handling user items. Packlist items (user items referred within the packlist) are handled within packlist operations.
+paths:
+  /items/batch:
+    put:
+      tags:
+        - items
+      summary: Update or create multiple user items
+      description: Update or create multiple user items
+      operationId: upsertItems
+      requestBody:
+        $ref: '#/components/requestBodies/UserItemsRequestBody'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserItem'
+        '400':
+          description: Invalid input. Malformed id and so on... *^_^*
+  /items/batchDelete:
+    post:
+      tags:
+        - items
+      summary: Delete multiple user items
+      description: Delete multiple user items. Failed requests do not delete any of the items.
+      operationId: deleteItems
+      requestBody:
+        description: Array of user item objects.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+                description: UUID identifier of item
+                format: uuid
+              example: [123e4567-e89b-12d3-a456-426614174000, 123e4567-e89b-12d3-a456-426614174001]
+      responses:
+        '200':
+          description: All items deleted successfully or they did not exist.
+        '400':
+          description: Invalid payload or id format
+        '403':
+          description: Not authorized to delete some item
+components:
+  schemas:
+    UserItem:
+      type: object
+      properties:
+        id:
+          type: string
+          description: UUID identifier. If not provided in requests, it will be generated.
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
+        name:
+          type: string
+          description: Name of item
+          example: Arc'teryx Gamma LT Hoody jacket
+        description:
+          type: string
+          description: A longer description of item
+          example: Softshell jacket. Two hand pockets, one pocket on inside.
+        weight:
+          type: number
+          description: Weight of item in grams. Any conversion or localization must be handled elsewhere.
+          example: 320
+        public_visibility:
+          type: boolean
+          description: Controls if the item is visible to other users. Publicly visible items can be found with item search.
+          example: true
+  requestBodies:
+    UserItemsRequestBody:
+      description: Array of user item objects.
+      required: true
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/UserItem'

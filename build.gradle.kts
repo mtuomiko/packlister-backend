@@ -6,6 +6,7 @@ plugins {
     id("io.spring.dependency-management").version("1.0.13.RELEASE")
     id("io.gitlab.arturbosch.detekt").version("1.21.0")
     id("com.diffplug.spotless").version("6.10.0")
+    id("org.openapi.generator").version("6.0.1")
     kotlin("jvm").version("1.6.21")
     kotlin("plugin.spring").version("1.6.21")
     kotlin("plugin.jpa").version("1.6.21")
@@ -27,6 +28,11 @@ dependencies {
     implementation("org.flywaydb:flyway-core")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
+    // needed by generated code
+    implementation("io.swagger.core.v3:swagger-annotations:2.2.2")
+    implementation("javax.validation:validation-api:2.0.1.Final")
+
     runtimeOnly("org.postgresql:postgresql")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.assertj:assertj-core:3.11.1")
@@ -67,5 +73,30 @@ configure<com.diffplug.gradle.spotless.SpotlessExtension> {
     }
     kotlinGradle {
         ktlint("0.46.1")
+    }
+}
+
+openApiGenerate {
+    generatorName.set("spring")
+    inputSpec.set("$rootDir/specs/api.yml")
+    outputDir.set("$buildDir/generated")
+    apiPackage.set("net.packlister.packlister.generated.api")
+    modelPackage.set("net.packlister.packlister.generated.model")
+    configOptions.set(
+        mapOf(
+            "delegatePattern" to "true",
+            "openApiNullable" to "false"
+        )
+    )
+    ignoreFileOverride.set("$rootDir/.openapi-generator-ignore")
+}
+
+openApiValidate {
+    inputSpec.set("$rootDir/specs/api.yml")
+}
+
+configure<SourceSetContainer> {
+    named("main") {
+        java.srcDir("$buildDir/generated/src/main/java")
     }
 }

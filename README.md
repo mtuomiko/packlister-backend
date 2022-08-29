@@ -1,6 +1,6 @@
 # Packlister
 
-And so on...
+Deployed to https://packlister.fly.dev (no functionality yet).
 
 ### Development
 
@@ -13,3 +13,7 @@ File `.env.dev` has an example of needed env vars for running the image. Databas
 Example commands
 * build `docker build -t packlister .`
 * run `docker run -p 8080:8080 --env-file ./.env.dev packlister`
+
+#### Fly.io (mainly note to self)
+
+Proxy access to production DB can be given with `flyctl proxy 15432:5432 -a packlister-db`
