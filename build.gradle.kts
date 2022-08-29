@@ -84,8 +84,8 @@ openApiGenerate {
     modelPackage.set("net.packlister.packlister.generated.model")
     configOptions.set(
         mapOf(
-            "delegatePattern" to "true",
-            "openApiNullable" to "false"
+            "delegatePattern" to "true", // creates delegate interfaces to implement
+            "openApiNullable" to "false" // otherwise generated code imports jackson-databind-nullable
         )
     )
     ignoreFileOverride.set("$rootDir/.openapi-generator-ignore")
@@ -95,6 +95,7 @@ openApiValidate {
     inputSpec.set("$rootDir/specs/api.yml")
 }
 
+// include generated code
 configure<SourceSetContainer> {
     named("main") {
         java.srcDir("$buildDir/generated/src/main/java")

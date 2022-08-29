@@ -1,0 +1,45 @@
+name: Main pipeline
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  main_pipeline:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_CONNECTION_URL: jdbc:postgresql://localhost:5432/packlister
+      DATABASE_CONNECTION_USERNAME: postgres
+      DATABASE_CONNECTION_PASSWORD: Hunter2
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_PASSWORD: ${{ env.DATABASE_CONNECTION_PASSWORD }}
+          POSTGRES_DB: packlister
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - name: Setup JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+      # will run detekt, spotless and so on
+      - name: Code quality, test, compile, build
+        run: ./gradlew clean build
+
