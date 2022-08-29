@@ -1,3 +1,4 @@
+import com.diffplug.gradle.spotless.SpotlessExtension
 import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -54,6 +55,7 @@ tasks.getByName<Jar>("jar") {
     enabled = false
 }
 
+// don't create reports, failure with console output enough for now
 tasks.withType<Detekt>().configureEach {
     reports { }
 }
@@ -62,12 +64,17 @@ tasks.withType<Detekt>().configureEach {
     jvmTarget = "1.8"
 }
 
+// application code needs generated code
+tasks.compileKotlin {
+    dependsOn(tasks.openApiGenerate)
+}
+
 detekt {
     config =
         files("$projectDir/detekt.yml") // point to your custom config defining rules to run, overwriting default behavior
 }
 
-configure<com.diffplug.gradle.spotless.SpotlessExtension> {
+configure<SpotlessExtension> {
     kotlin {
         ktlint("0.46.1")
     }
