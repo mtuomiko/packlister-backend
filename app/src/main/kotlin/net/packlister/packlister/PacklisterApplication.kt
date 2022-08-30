@@ -7,6 +7,6 @@ import org.springframework.boot.runApplication
 class PacklisterApplication
 
 fun main(args: Array<String>) {
-    @Suppress("SpreadOperator") // run once
+    @Suppress("SpreadOperator") // runs once
     runApplication<PacklisterApplication>(*args)
 }
