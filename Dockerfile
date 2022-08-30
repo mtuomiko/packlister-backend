@@ -9,6 +9,6 @@ USER spring:spring
 
 WORKDIR /app
 
-COPY build/libs/*.jar app.jar
+COPY app/build/libs/*.jar app.jar
 
 ENTRYPOINT ["java","-jar","/app/app.jar"]
