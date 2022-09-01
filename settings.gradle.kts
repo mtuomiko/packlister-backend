@@ -2,6 +2,7 @@ rootProject.name = "packlister"
 
 include(
     "platform",
+    "app",
     "gen",
-    "app"
+    "api"
 )
