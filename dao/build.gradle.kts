@@ -1,5 +1,7 @@
 plugins {
     id("spring-conventions")
+
+    kotlin("plugin.jpa").version(Versions.kotlin)
 }
 
 dependencies {
@@ -8,8 +10,10 @@ dependencies {
     }
 
     implementation(project(":common"))
-    implementation(project(":gen"))
-    implementation(project(":svc"))
 
-    implementation(Libs.Spring.bootStarterWeb)
+    implementation(Libs.Spring.bootStarterDataJpa)
+    implementation(Libs.kotlinReflect)
+    implementation(Libs.flywayCore)
+
+    runtimeOnly(Libs.postgres)
 }

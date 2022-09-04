@@ -6,11 +6,7 @@ spring:
   jpa:
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         default_schema: packlister
   flyway:
     defaultSchema: packlister
-logging:
-  level:
-    org:
-      hibernate:
-        SQL: DEBUG

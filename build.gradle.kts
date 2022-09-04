@@ -2,12 +2,41 @@ import com.diffplug.gradle.spotless.SpotlessExtension
 import io.gitlab.arturbosch.detekt.Detekt
 
 plugins {
-    id("io.gitlab.arturbosch.detekt").version("1.21.0")
-    id("com.diffplug.spotless").version("6.10.0")
+    id(Plugins.detekt).version(Versions.detekt)
+    id(Plugins.spotless).version(Versions.spotless)
+    id("jacoco-report-aggregation")
 }
 
 repositories {
     mavenCentral()
+}
+
+dependencies {
+    jacocoAggregation(project(":app")) // use app as entrypoint for aggregation
+}
+
+reporting {
+    reports {
+        val jacocoMerged by creating(JacocoCoverageReport::class) {
+            testType.set(TestSuiteType.UNIT_TEST)
+        }
+    }
+}
+tasks.check {
+    dependsOn(tasks.named<JacocoReport>("jacocoMerged"))
+}
+
+// use all subproject classes except generated for merged report
+tasks.named("jacocoMerged", JacocoReport::class).configure {
+    classDirectories.setFrom(
+        files(
+            subprojects.map {
+                it.fileTree("${it.buildDir}/classes/kotlin/main") {
+                    exclude("**/generated/*")
+                }
+            }
+        )
+    )
 }
 
 detekt {
@@ -24,16 +53,21 @@ tasks.withType<Detekt>().configureEach {
         sarif.required.set(false)
         md.required.set(false)
     }
+    exclude(
+        "buildSrc/build/**/*", // don't check compiled buildSrc code
+        "*.gradle.kts" // don't check gradle scripts, no need for so strict checking
+    )
 }
 
 configure<SpotlessExtension> {
     kotlin {
         target("**/*.kt")
         targetExclude("buildSrc/build/**/*")
-        ktlint("0.46.1")
+        ktlint(Versions.ktlint)
     }
     kotlinGradle {
         target("**/*.gradle.kts")
-        ktlint("0.46.1")
+        targetExclude("buildSrc/build/**/*")
+        ktlint(Versions.ktlint)
     }
 }

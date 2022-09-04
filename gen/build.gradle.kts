@@ -1,6 +1,6 @@
 plugins {
     id("java-library")
-    id("org.openapi.generator").version("6.0.1")
+    id(Plugins.openApiGenerator).version(Versions.openApiGenerator)
 }
 
 repositories {
@@ -13,9 +13,9 @@ dependencies {
     }
 
     // needed by generated code
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("io.swagger.core.v3:swagger-annotations")
-    implementation("javax.validation:validation-api")
+    implementation(Libs.Spring.bootStarterWeb)
+    implementation(Libs.swaggerAnnotations)
+    implementation(Libs.javaxValidationApi)
 }
 
 openApiGenerate {

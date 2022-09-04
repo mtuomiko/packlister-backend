@@ -4,11 +4,14 @@ spring:
     username: ${DATABASE_CONNECTION_USERNAME}
     password: ${DATABASE_CONNECTION_PASSWORD}
   jpa:
+    open-in-view: false # disable unless some need arises
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: ${DATABASE_SCHEMA}
   flyway:
-    defaultSchema: packlister
+    defaultSchema: ${DATABASE_SCHEMA}
+    locations: classpath:migrations
 management:
   endpoint:
     enabled-by-default: false

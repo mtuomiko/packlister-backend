@@ -3,6 +3,15 @@ rootProject.name = "packlister"
 include(
     "platform",
     "app",
+    "common",
     "gen",
-    "api"
+    "api",
+    "svc",
+    "dao"
 )
+
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+    }
+}

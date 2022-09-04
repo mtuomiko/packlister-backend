@@ -8,8 +8,5 @@ dependencies {
     }
 
     implementation(project(":common"))
-    implementation(project(":gen"))
-    implementation(project(":svc"))
-
-    implementation(Libs.Spring.bootStarterWeb)
+    implementation(project(":dao"))
 }
