@@ -1,6 +1,6 @@
 # Packlister
 
-Deployed to https://packlister.fly.dev (no functionality yet).
+Deployed to Railway.app at https://packlister-production.up.railway.app (still some deficiencies like no frontend :x)
 
 ## Modules
 
@@ -50,7 +50,3 @@ File `.env.dev` has an example of needed env vars for running the image. Databas
 Example commands
 * build image `docker build -t packlister .`
 * run `docker run --rm -it -p 8080:8080 --env-file ./.env.dev packlister`
-
-### Fly.io (mainly note to self)
-
-Proxy access to production DB can be given with `flyctl proxy 15432:5432 -a packlister-db`
