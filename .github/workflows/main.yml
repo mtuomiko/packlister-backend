@@ -24,7 +24,7 @@ jobs:
         env:
           POSTGRES_PASSWORD: ${{ env.DATABASE_CONNECTION_PASSWORD }}
           POSTGRES_DB: packlister
-          PGUSER: postgres
+          PGUSER: postgres # health check uses machine OS user otherwise
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
