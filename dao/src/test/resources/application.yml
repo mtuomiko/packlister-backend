@@ -10,4 +10,4 @@ spring:
         default_schema: packlister
   flyway:
     defaultSchema: packlister
-    locations: classpath:migrations
+    locations: classpath:migrations # improve: this is doubled from app config
