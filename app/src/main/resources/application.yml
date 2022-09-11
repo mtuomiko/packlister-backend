@@ -5,6 +5,7 @@ spring:
     url: ${DATABASE_CONNECTION_URL}
     username: ${DATABASE_CONNECTION_USERNAME}
     password: ${DATABASE_CONNECTION_PASSWORD}
+    driverClassName: org.postgresql.Driver
   jpa:
     open-in-view: false # disable unless some need arises
     properties:
