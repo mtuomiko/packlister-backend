@@ -9,11 +9,15 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         default_schema: ${DATABASE_SCHEMA}
+        jdbc:
+          batch_size: 25
   flyway:
     defaultSchema: ${DATABASE_SCHEMA}
     locations: classpath:migrations
+jwt:
+  secret: ${JWT_SECRET}
 management:
   endpoint:
-    enabled-by-default: false
+    enabled-by-default: false # don't expose unwanted actuator endpoints
     health:
       enabled: true

@@ -45,7 +45,7 @@ detekt {
 }
 
 tasks.withType<Detekt>().configureEach {
-    jvmTarget = "11"
+    jvmTarget = "17"
     reports { // console output and possible failure enough for now
         xml.required.set(false)
         html.required.set(false)
@@ -54,8 +54,9 @@ tasks.withType<Detekt>().configureEach {
         md.required.set(false)
     }
     exclude(
-        "buildSrc/build/**/*", // don't check compiled buildSrc code
-        "*.gradle.kts" // don't check gradle scripts, no need for so strict checking
+        "buildSrc/build/**/*", // compiled buildSrc code
+        "*.gradle.kts", // no need for so strict checks on scripts (unused can cause issues, for example)
+        "**/testFixtures/**/*" // test code
     )
 }
 

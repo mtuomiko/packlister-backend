@@ -11,5 +11,5 @@ dependencies {
     implementation(project(":gen"))
     implementation(project(":svc"))
 
-    implementation(Libs.Spring.bootStarterWeb)
+    implementation("org.springframework.security:spring-security-core") // PasswordEncoder
 }

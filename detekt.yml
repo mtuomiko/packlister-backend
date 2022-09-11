@@ -590,7 +590,7 @@ style:
     maxLineLength: 120
     excludePackageStatements: true
     excludeImportStatements: true
-    excludeCommentStatements: false
+    excludeCommentStatements: true # long urls in comments
   MayBeConst:
     active: true
   ModifierOrder:

@@ -6,13 +6,27 @@ info:
     Java Spring controllers code for the API level implementation..
   version: 1.0.0
 servers:
-  - url: http://localhost:8080
+  - url: /api
 tags:
   - name: packlists
     description: Operations for handling packlists
   - name: items
     description: Operations for handling user items. Packlist items (user items referred within the packlist) are handled within packlist operations.
+  - name: auth
+    description: User registration and login
 paths:
+  /items:
+    get:
+      tags:
+        - items
+      summary: Get authenticated user's user items.
+      description: Get authenticated user's user items.
+      operationId: getItems
+      responses:
+        '200':
+          $ref: '#/components/responses/UserItemsResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
   /items/batch:
     put:
       tags:
@@ -35,32 +49,83 @@ paths:
       description: Delete multiple user items. Failed requests do not delete any of the items.
       operationId: deleteItems
       requestBody:
-        description: Array of user item objects.
+        $ref: '#/components/requestBodies/UserItemIdsRequestBody'
+      responses:
+        '200':
+          description: All items deleted successfully or they did not exist.
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+  /auth/register:
+    post:
+      tags:
+        - auth
+      summary: Register user
+      description: Register user
+      operationId: register
+      requestBody:
+        description: User registration object
         required: true
         content:
           application/json:
             schema:
-              type: array
-              items:
-                type: string
-                description: UUID identifier of item
-                format: uuid
-              example: [123e4567-e89b-12d3-a456-426614174000, 123e4567-e89b-12d3-a456-426614174001]
+              $ref: '#/components/schemas/UserRegistration'
       responses:
         '200':
-          $ref:  '#/components/responses/UserItemsBatchDeleteResponse'
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
         default:
-          $ref:  '#/components/responses/UserItemsBatchDeleteResponse'
+          $ref: '#/components/responses/ErrorResponse'
+  /auth/token:
+    post:
+      tags:
+        - auth
+      summary: Get JWT token
+      description: Get JWT token by providing credentials
+      operationId: token
+      requestBody:
+        description: Credentials object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCredentials'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
 components:
   schemas:
+    UUID:
+      type: string
+      description: UUID identifier
+      format: uuid
+      example: 123e4567-e89b-12d3-a456-426614174000
+    Username:
+      type: string
+      description: User identifier
+      example: foo
+    Email:
+      type: string
+      description: User email
+      format: email
+      example: johnny@mail.com
+    Password:
+      type: string
+      description: User password
+      example: Hunter2
     UserItem:
       type: object
       properties:
         id:
-          type: string
-          description: UUID identifier. If not provided in requests, it will be generated.
-          format: uuid
-          example: 123e4567-e89b-12d3-a456-426614174000
+          $ref: '#/components/schemas/UUID'
         name:
           type: string
           description: Name of item
@@ -81,6 +146,57 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/UserItem'
+    User:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        username:
+          $ref: '#/components/schemas/Username'
+        email:
+          $ref: '#/components/schemas/Email'
+      required:
+        - id
+        - username
+        - email
+    UserRegistration:
+      type: object
+      properties:
+        username:
+          $ref: '#/components/schemas/Username'
+        email:
+          $ref: '#/components/schemas/Email'
+        password:
+          $ref: '#/components/schemas/Password'
+      required:
+        - username
+        - email
+        - password
+    UserCredentials:
+      type: object
+      properties:
+        username:
+          $ref: '#/components/schemas/Username'
+        password:
+          $ref: '#/components/schemas/Password'
+      required:
+        - username
+        - password
+    Token:
+      type: object
+      properties:
+        token:
+          type: string
+          description: JWT token
+          example: xxxxx.yyyyy.zzzzz
+        username:
+          $ref: '#/components/schemas/Username'
+        email:
+          $ref: '#/components/schemas/Email'
+      required:
+        - token
+        - username
+        - email
     APIError:
       type: object
       properties:
@@ -113,6 +229,18 @@ components:
             properties:
               userItems:
                 $ref: '#/components/schemas/UserItemArray'
+    UserItemIdsRequestBody:
+      description: Object containing a list of user item ids.
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              userItemIds:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UUID'
   responses:
     UserItemsResponse:
       description: Object containing list of user items for successful operation, or possible errors for failure.
@@ -122,6 +250,12 @@ components:
             $ref: '#/components/schemas/UserItemsResponse'
     UserItemsBatchDeleteResponse:
       description: Successful case all items deleted successfully or they did not exist. Contains errors only if operation failed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorWrapper'
+    ErrorResponse:
+      description: Generic error response containing an array of errors
       content:
         application/json:
           schema:

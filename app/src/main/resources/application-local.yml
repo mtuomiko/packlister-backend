@@ -7,10 +7,16 @@ spring:
     properties:
       hibernate:
         default_schema: packlister
+#        format_sql: true
+        generate_statistics: true # get an idea of actual statements / batches since Hibernate logs can lie
   flyway:
     defaultSchema: packlister
+jwt:
+  secret: Wbd612xiuO19hzU1fotOp5ay5DD7JmSx
 logging:
   level:
     org:
       hibernate:
         SQL: DEBUG
+      springframework:
+#        security: DEBUG

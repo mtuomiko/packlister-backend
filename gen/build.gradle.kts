@@ -13,7 +13,7 @@ dependencies {
     }
 
     // needed by generated code
-    implementation(Libs.Spring.bootStarterWeb)
+    implementation(Libs.Spring.bootStarterWeb) // use a more limited dep?
     implementation(Libs.swaggerAnnotations)
     implementation(Libs.javaxValidationApi)
 }
@@ -27,7 +27,7 @@ openApiGenerate {
     configOptions.set(
         mapOf(
             "delegatePattern" to "true", // creates delegate interfaces to implement
-            "openApiNullable" to "false" // otherwise generated code imports jackson-databind-nullable
+            "openApiNullable" to "false" // otherwise generated code will import unwanted jackson-databind-nullable
         )
     )
     ignoreFileOverride.set("$projectDir/.openapi-generator-ignore")
@@ -37,15 +37,15 @@ openApiValidate {
     inputSpec.set("$projectDir/api.yml")
 }
 
-// Other subproject dependencies on this need the generated classes.
+// Other subproject dependencies on this project need the generated classes.
 configure<SourceSetContainer> {
     named("main") {
         java.srcDir("$buildDir/generated/src/main/java")
     }
 }
 
-// Ensure that code is generated for dependents. Kinda haxy since results in class files that are not used. Not using
-// java-library plugin might help?
+// Ensure that code is generated for dependents. Kinda haxy since results in class files that are not used. Somehow not
+// using java-library plugin might be a way out of this?
 tasks.compileJava {
     dependsOn(tasks.openApiGenerate)
 }

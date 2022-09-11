@@ -1,9 +1,10 @@
 CREATE SCHEMA IF NOT EXISTS packlister;
 
 CREATE TABLE IF NOT EXISTS accounts (
-    id       uuid PRIMARY KEY,
-    username text UNIQUE NOT NULL,
-    email    text UNIQUE NOT NULL
+    id            uuid PRIMARY KEY,
+    username      text UNIQUE NOT NULL,
+    email         text UNIQUE NOT NULL,
+    password_hash text NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS items (
@@ -12,5 +13,5 @@ CREATE TABLE IF NOT EXISTS items (
     description       text,
     weight            integer,
     public_visibility boolean DEFAULT false,
-    account           uuid
+    account           uuid REFERENCES accounts
 );

@@ -2,6 +2,7 @@ package net.packlister.packlister.dao.entity
 
 import net.packlister.packlister.model.UserItem
 import java.util.UUID
+import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Id
 import javax.persistence.Table
@@ -15,7 +16,8 @@ class UserItemEntity(
     val description: String?,
     val weight: Int?,
     val publicVisibility: Boolean? = false,
-    val account: UUID?
+    @Column(name = "account")
+    val userId: UUID
 ) {
     fun toModel() = with(this) { UserItem(id, name, description, weight, publicVisibility) }
 }

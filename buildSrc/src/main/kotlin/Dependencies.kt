@@ -3,7 +3,9 @@ object Libs {
         const val bootStarterWeb = "org.springframework.boot:spring-boot-starter-web"
         const val bootStarterDataJpa = "org.springframework.boot:spring-boot-starter-data-jpa"
         const val bootStarterActuator = "org.springframework.boot:spring-boot-starter-actuator"
+        const val bootStarterSecurity = "org.springframework.boot:spring-boot-starter-security"
         const val bootStarterTest = "org.springframework.boot:spring-boot-starter-test"
+        const val bootStarterOauthResourceServer = "org.springframework.boot:spring-boot-starter-oauth2-resource-server"
     }
 
     const val kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8"

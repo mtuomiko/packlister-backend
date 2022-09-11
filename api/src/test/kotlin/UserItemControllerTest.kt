@@ -1,10 +1,8 @@
-import net.packlister.packlister.api.CustomError
 import net.packlister.packlister.api.UserItemController
 import net.packlister.packlister.generated.model.UpsertItemsRequest
 import net.packlister.packlister.generated.model.UserItem
 import net.packlister.packlister.svc.UserItemService
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -21,16 +19,6 @@ class UserItemControllerTest {
     @BeforeAll
     fun setup() {
         whenever(userItemService.upsertUserItems(any())).thenAnswer { it.arguments[0] }
-    }
-
-    @Test
-    fun deleteItemsThrows() {
-        val thrown = catchThrowable {
-            controller.deleteItems(listOf())
-        }
-        assertThat(thrown)
-            .isInstanceOf(CustomError::class.java)
-            .hasMessageContaining("nope")
     }
 
     @Test

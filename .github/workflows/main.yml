@@ -38,7 +38,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: '11'
+          java-version: '17'
       # will run detekt, spotless and so on
       - name: Code quality, test, compile, build
         run: ./gradlew clean build
