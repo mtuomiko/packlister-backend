@@ -1,6 +1,7 @@
 package net.packlister.packlister.svc
 
 import net.packlister.packlister.model.User
+import net.packlister.packlister.svc.model.UserToken
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -19,7 +20,7 @@ class AuthService(
     @Autowired
     private val jwtEncoder: JwtEncoder
 ) {
-    fun token(username: String, password: String): String {
+    fun token(username: String, password: String): UserToken {
         val authentication = authenticationManager.authenticate(
             UsernamePasswordAuthenticationToken(username, password)
         )
@@ -34,7 +35,8 @@ class AuthService(
             .expiresAt(now.plusSeconds(VALIDITY))
             .build()
         val header = JwsHeader.with(MacAlgorithm.HS256).build()
-        return jwtEncoder.encode(JwtEncoderParameters.from(header, claims)).tokenValue
+        val token = jwtEncoder.encode(JwtEncoderParameters.from(header, claims)).tokenValue
+        return UserToken(token, user.username, user.email)
     }
 }
 

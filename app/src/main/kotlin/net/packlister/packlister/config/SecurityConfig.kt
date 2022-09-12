@@ -17,6 +17,9 @@ import org.springframework.security.oauth2.jwt.JwtEncoder
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 import javax.crypto.spec.SecretKeySpec
 
 @EnableWebSecurity
@@ -39,10 +42,22 @@ class SecurityConfig(
                 authorize(anyRequest, authenticated)
             }
             csrf { disable() }
+            cors { }
             sessionManagement { sessionCreationPolicy = SessionCreationPolicy.STATELESS }
             oauth2ResourceServer { jwt { } }
         }
         return http.build()
+    }
+
+    @Bean
+    fun corsConfigurationSource(): CorsConfigurationSource {
+        val configuration = CorsConfiguration()
+        configuration.allowedOrigins = listOf("*")
+        configuration.allowedMethods = listOf("*")
+        configuration.allowedHeaders = listOf("*")
+        val source = UrlBasedCorsConfigurationSource()
+        source.registerCorsConfiguration("/**", configuration);
+        return source
     }
 
     @Bean

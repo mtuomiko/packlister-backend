@@ -83,7 +83,7 @@ paths:
       tags:
         - auth
       summary: Get JWT token
-      description: Get JWT token by providing credentials
+      description: Get JWT token by providing credentials. Response also has user information.
       operationId: token
       requestBody:
         description: Credentials object
@@ -98,7 +98,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/Token'
         default:
           $ref: '#/components/responses/ErrorResponse'
 components:

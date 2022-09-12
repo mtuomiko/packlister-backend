@@ -21,4 +21,6 @@ logging:
       hibernate:
         SQL: DEBUG
       springframework:
-#        security: DEBUG
+        security: DEBUG
+        web:
+          cors: DEBUG

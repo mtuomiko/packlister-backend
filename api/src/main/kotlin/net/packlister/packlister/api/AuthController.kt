@@ -1,6 +1,7 @@
 package net.packlister.packlister.api
 
 import net.packlister.packlister.generated.api.AuthApiDelegate
+import net.packlister.packlister.generated.model.Token
 import net.packlister.packlister.generated.model.User
 import net.packlister.packlister.generated.model.UserCredentials
 import net.packlister.packlister.model.CustomError
@@ -35,8 +36,13 @@ class AuthController(
         return ResponseEntity.ok(response)
     }
 
-    override fun token(userCredentials: UserCredentials): ResponseEntity<User> {
-        val token = authService.token(userCredentials.username, userCredentials.password)
-        throw CustomError(token)
+    override fun token(userCredentials: UserCredentials): ResponseEntity<Token> {
+        val tokenWithUser = authService.token(userCredentials.username, userCredentials.password)
+        val response = Token().apply {
+            token = tokenWithUser.token
+            username = tokenWithUser.username
+            email = tokenWithUser.email
+        }
+        return ResponseEntity.ok(response)
     }
 }
