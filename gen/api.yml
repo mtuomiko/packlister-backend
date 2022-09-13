@@ -138,7 +138,7 @@ components:
           type: integer
           description: Weight of item in grams. Any conversion or localization must be handled elsewhere.
           example: 320
-        public_visibility:
+        publicVisibility:
           type: boolean
           description: Controls if the item is visible to other users. Publicly visible items can be found with item search.
           example: true

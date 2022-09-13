@@ -8,7 +8,7 @@ class UserItemBuilder {
     var name: String? = "item"
     var description: String? = "description"
     var weight: Int? = 100
-    var publicVisibility: Boolean? = true
+    var publicVisibility: Boolean = true
 
     fun id(id: UUID) = apply { this.id = id }
     fun name(name: String) = apply { this.name = name }

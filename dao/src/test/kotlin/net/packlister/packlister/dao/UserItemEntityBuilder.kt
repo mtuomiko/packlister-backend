@@ -8,7 +8,7 @@ class UserItemEntityBuilder {
     var name: String? = "item"
     var description: String? = "description"
     var weight: Int? = 100
-    var publicVisibility: Boolean? = true
+    var publicVisibility: Boolean = true
     var userId: UUID = UUID.randomUUID()
 
     fun id(id: UUID) = apply { this.id = id }

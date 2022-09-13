@@ -10,7 +10,7 @@ spring:
       hibernate:
         default_schema: packlister
 #        format_sql: true
-        generate_statistics: true # get an idea of actual statements / batches since Hibernate logs can lie
+#        generate_statistics: true # get an idea of actual statements / batches since Hibernate logs can lie
   flyway:
     defaultSchema: packlister
 jwt:
@@ -21,6 +21,6 @@ logging:
       hibernate:
         SQL: DEBUG
       springframework:
-        security: DEBUG
+#        security: DEBUG
         web:
-          cors: DEBUG
+#          cors: DEBUG
