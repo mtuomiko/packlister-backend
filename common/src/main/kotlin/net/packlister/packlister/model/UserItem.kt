@@ -7,5 +7,5 @@ data class UserItem(
     val name: String?,
     val description: String?,
     val weight: Int?,
-    val publicVisibility: Boolean?
+    val publicVisibility: Boolean = false
 )

@@ -15,7 +15,7 @@ class UserItemEntity(
     val name: String?,
     val description: String?,
     val weight: Int?,
-    val publicVisibility: Boolean? = false,
+    val publicVisibility: Boolean = false,
     @Column(name = "account")
     val userId: UUID
 ) {

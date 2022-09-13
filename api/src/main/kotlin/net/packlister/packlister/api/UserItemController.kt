@@ -34,15 +34,13 @@ class UserItemController(
         return ResponseEntity.ok(response)
     }
 
-    fun APIUserItem.toModel() = with(this) {
-        UserItem(
-            id,
-            name,
-            description,
-            weight,
-            publicVisibility
-        )
-    }
+    fun APIUserItem.toModel() = UserItem(
+        this.id,
+        this.name,
+        this.description,
+        this.weight,
+        publicVisibility = this.publicVisibility ?: false
+    )
 
     fun UserItem.toApiModel() = APIUserItem().also {
         it.id = id

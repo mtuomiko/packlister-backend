@@ -12,6 +12,6 @@ CREATE TABLE IF NOT EXISTS items (
     name              text,
     description       text,
     weight            integer,
-    public_visibility boolean DEFAULT false,
+    public_visibility boolean NOT NULL,
     account           uuid REFERENCES accounts
 );
