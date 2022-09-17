@@ -15,6 +15,7 @@ object Libs {
 
     const val flywayCore = "org.flywaydb:flyway-core"
     const val postgres = "org.postgresql:postgresql"
+    const val hibernateTypes = "com.vladmihalcea:hibernate-types-55"
 
     const val swaggerAnnotations = "io.swagger.core.v3:swagger-annotations"
     const val javaxValidationApi = "javax.validation:validation-api"
@@ -28,13 +29,14 @@ object Versions {
 
     const val springBoot = "2.7.3"
 
+    const val hibernateTypes = "2.19.2"
+
     const val openApiGenerator = "6.0.1"
+    const val swaggerAnnotations = "2.2.2"
 
     const val detekt = "1.21.0"
     const val spotless = "6.10.0"
     const val ktlint = "0.46.1"
-
-    const val swaggerAnnotations = "2.2.2"
 
     const val mockito = "4.0.0"
 }

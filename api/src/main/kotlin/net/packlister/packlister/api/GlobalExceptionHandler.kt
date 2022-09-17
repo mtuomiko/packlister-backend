@@ -5,6 +5,7 @@ import net.packlister.packlister.generated.model.ErrorWrapper
 import net.packlister.packlister.model.ConflictError
 import net.packlister.packlister.model.CustomError
 import net.packlister.packlister.model.ForbiddenError
+import net.packlister.packlister.model.NotFoundError
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -22,6 +23,10 @@ class GlobalExceptionHandler {
             is ForbiddenError -> ResponseEntity(
                 ErrorWrapper().errors(listOf(APIError().message(ex.message))),
                 HttpStatus.FORBIDDEN
+            )
+            is NotFoundError -> ResponseEntity(
+                ErrorWrapper().errors(listOf(APIError().message(ex.message))),
+                HttpStatus.NOT_FOUND
             )
             else -> ResponseEntity(
                 ErrorWrapper().errors(listOf(APIError().message(ex.message))),

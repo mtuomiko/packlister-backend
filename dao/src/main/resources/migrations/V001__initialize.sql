@@ -15,3 +15,11 @@ CREATE TABLE IF NOT EXISTS items (
     public_visibility boolean NOT NULL,
     account           uuid REFERENCES accounts
 );
+
+CREATE TABLE IF NOT EXISTS packlists (
+    id          uuid PRIMARY KEY,
+    name        text,
+    description text,
+    content     jsonb NOT NULL,
+    account     uuid REFERENCES accounts
+);

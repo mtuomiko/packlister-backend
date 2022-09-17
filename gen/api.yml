@@ -55,6 +55,47 @@ paths:
           description: All items deleted successfully or they did not exist.
         default:
           $ref: '#/components/responses/ErrorResponse'
+  /packlists:
+    get:
+      tags: [packlists]
+      summary: Get all the user's packlists
+      description: Response has only limited view on data of packlists.
+      operationId: getAllPacklists
+      responses:
+        '200':
+          $ref: '#/components/responses/PacklistsLimitedResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+  /packlists/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Packlist UUID
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      tags: [packlists]
+      summary: Get single packlist
+      description: Get the entire packlist content.
+      operationId: getPacklist
+      responses:
+        '200':
+          $ref: '#/components/responses/PacklistResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+    put:
+      tags: [packlists]
+      summary: Update or create a single packlist
+      description: Update or create single packlist
+      operationId: updatePacklist
+      requestBody:
+        $ref: '#/components/requestBodies/PacklistRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/PacklistResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
   /auth/register:
     post:
       tags:
@@ -146,6 +187,58 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/UserItem'
+    Packlist:
+      type: object
+      description: Top level model for a items grouped together.
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        name:
+          type: string
+          description: Name of packlist
+          example: Halti hike
+        description:
+          type: string
+          description: Description of packlist
+          example: Made the trip on September 2021. Does not contain extra stuff stored in the car.
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+    PacklistLimitedView:
+      type: object
+      description: Limited view of a packlist containing only id and name.
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        name:
+          type: string
+          description: Name of packlist
+          example: Halti hike
+    Category:
+      type: object
+      description: Nested model grouping items, for example of certain purpose, together.
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        name:
+          type: string
+          description: Name of category
+          example: Sleeping equipment
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryItem'
+    CategoryItem:
+      type: object
+      description: Links an user item to the packlist/category. Only has quantity as independent data.
+      properties:
+        userItemId:
+          $ref: '#/components/schemas/UUID'
+        quantity:
+          type: integer
+          description: Quantity of items of this type. For example multiple packages of some food.
+          example: 5
     User:
       type: object
       properties:
@@ -241,6 +334,13 @@ components:
                 type: array
                 items:
                   $ref: '#/components/schemas/UUID'
+    PacklistRequestBody:
+      description: The packlist object
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Packlist'
   responses:
     UserItemsResponse:
       description: Object containing list of user items for successful operation, or possible errors for failure.
@@ -254,6 +354,23 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorWrapper'
+    PacklistsLimitedResponse:
+      description: Object containing a list of packlists with a limited view.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              packlists:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PacklistLimitedView'
+    PacklistResponse:
+      description: Single packlist response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Packlist'
     ErrorResponse:
       description: Generic error response containing an array of errors
       content:

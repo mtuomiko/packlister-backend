@@ -20,6 +20,9 @@ dependencies {
         // improve: not actually working, figure out
         api("${Libs.mockitoCore}:${Versions.mockito}")
         api("${Libs.mockitoKotlin}:${Versions.mockito}")
+
         api("${Libs.swaggerAnnotations}:${Versions.swaggerAnnotations}")
+
+        api("${Libs.hibernateTypes}:${Versions.hibernateTypes}")
     }
 }

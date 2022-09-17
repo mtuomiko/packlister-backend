@@ -48,13 +48,6 @@ class UserItemDao(
     }
 
     private fun UserItem.toEntity(userId: UUID) = with(this) {
-        UserItemEntity(
-            id,
-            name,
-            description,
-            weight,
-            publicVisibility,
-            userId
-        )
+        UserItemEntity(id, name, description, weight, publicVisibility, userId)
     }
 }

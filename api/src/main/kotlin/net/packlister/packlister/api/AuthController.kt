@@ -4,7 +4,6 @@ import net.packlister.packlister.generated.api.AuthApiDelegate
 import net.packlister.packlister.generated.model.Token
 import net.packlister.packlister.generated.model.User
 import net.packlister.packlister.generated.model.UserCredentials
-import net.packlister.packlister.model.CustomError
 import net.packlister.packlister.svc.AuthService
 import net.packlister.packlister.svc.UserService
 import net.packlister.packlister.svc.model.UserRegistration
