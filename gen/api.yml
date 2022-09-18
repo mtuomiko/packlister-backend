@@ -84,10 +84,22 @@ paths:
           $ref: '#/components/responses/PacklistResponse'
         default:
           $ref: '#/components/responses/ErrorResponse'
+    post:
+      tags: [packlists]
+      summary: Create a single packlist
+      description: Create a single packlist
+      operationId: createPacklist
+      requestBody:
+        $ref: '#/components/requestBodies/PacklistRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/PacklistResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
     put:
       tags: [packlists]
-      summary: Update or create a single packlist
-      description: Update or create single packlist
+      summary: Update a single packlist
+      description: Update a single packlist
       operationId: updatePacklist
       requestBody:
         $ref: '#/components/requestBodies/PacklistRequestBody'

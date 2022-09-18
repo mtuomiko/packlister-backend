@@ -43,6 +43,8 @@ App assumes an existing PostgreSQL database to be available at `postgresql://loc
 
 Run one with docker using for example `docker run -d --restart unless-stopped --name dev-postgres -p 5432:5432 -e POSTGRES_DB=packlister -e POSTGRES_PASSWORD=Hunter2 postgres:14`
 
+Run locally using Gradle task `bootRun` using `local` profile, for example by providing env var `SPRING_PROFILES_ACTIVE=local`.
+
 ### Containerized
 
 File `.env.dev` has an example of needed env vars for running the image. Database host (example used `host.docker.internal`) might vary depending on setup.

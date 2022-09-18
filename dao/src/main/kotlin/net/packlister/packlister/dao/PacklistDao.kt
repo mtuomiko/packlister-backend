@@ -3,6 +3,7 @@ package net.packlister.packlister.dao
 import net.packlister.packlister.dao.entity.PacklistEntity
 import net.packlister.packlister.dao.repository.PacklistRepository
 import net.packlister.packlister.model.ForbiddenError
+import net.packlister.packlister.model.NotFoundError
 import net.packlister.packlister.model.Packlist
 import net.packlister.packlister.model.PacklistLimited
 import org.springframework.beans.factory.annotation.Autowired
@@ -42,13 +43,22 @@ class PacklistDao(
     }
 
     @Transactional
-    fun upsertPacklist(userId: UUID, packlist: Packlist): Packlist {
+    fun createPacklist(userId: UUID, packlist: Packlist): Packlist {
         val entity = packlist.toEntity(userId)
-        val existingPacklist = packlistRepository.findById(packlist.id)
-        if (existingPacklist.isPresent) {
-            return packlistRepository.update(entity).toModel()
-        }
         return packlistRepository.persist(entity).toModel()
+    }
+
+    @Transactional
+    fun updatePacklist(userId: UUID, packlist: Packlist): Packlist {
+        val existingPacklist = packlistRepository.findById(packlist.id).orElseThrow {
+            NotFoundError("packlist with id ${packlist.id} not found")
+        }
+        if (existingPacklist.userId != userId) {
+            throw ForbiddenError("not allowed to modify packlists of other users")
+        }
+        packlistRepository.session().clear() // clear existing entity from session
+        val entity = packlist.toEntity(userId)
+        return packlistRepository.update(entity).toModel()
     }
 
     private fun Packlist.toEntity(userId: UUID) = with(this) {

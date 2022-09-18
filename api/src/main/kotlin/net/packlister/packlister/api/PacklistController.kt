@@ -38,12 +38,20 @@ class PacklistController(
         return ResponseEntity.ok(apiPacklist)
     }
 
+    override fun createPacklist(id: UUID, packlist: APIPacklist): ResponseEntity<APIPacklist> {
+        if (id != packlist.id) {
+            throw ValidationError("inconsistent id in request")
+        }
+        val createdPacklist = packlistService.createPacklist(packlist.toModel())
+        return ResponseEntity.ok(createdPacklist.toApiModel())
+    }
+
     override fun updatePacklist(id: UUID, packlist: APIPacklist): ResponseEntity<APIPacklist> {
         if (id != packlist.id) {
             throw ValidationError("inconsistent id in request")
         }
-        val packlist = packlistService.upsertPacklist(packlist.toModel())
-        return ResponseEntity.ok(packlist.toApiModel())
+        val updatedPacklist = packlistService.updatePacklist(packlist.toModel())
+        return ResponseEntity.ok(updatedPacklist.toApiModel())
     }
 
     private fun Packlist.toApiModel() = APIPacklist().also {

@@ -25,7 +25,11 @@ class PacklistService(
             ?: throw NotFoundError("packlist with id $id not found")
     }
 
-    fun upsertPacklist(packlist: Packlist): Packlist {
-        return packlistDao.upsertPacklist(tokenReader.getUserId(), packlist)
+    fun createPacklist(packlist: Packlist): Packlist {
+        return packlistDao.createPacklist(tokenReader.getUserId(), packlist)
+    }
+
+    fun updatePacklist(packlist: Packlist): Packlist {
+        return packlistDao.updatePacklist(tokenReader.getUserId(), packlist)
     }
 }
