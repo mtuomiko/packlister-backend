@@ -131,29 +131,6 @@ paths:
                 $ref: '#/components/schemas/User'
         default:
           $ref: '#/components/responses/ErrorResponse'
-  /auth/token:
-    post:
-      tags:
-        - auth
-      summary: Get JWT token
-      description: Get JWT token by providing credentials. Response also has user information.
-      operationId: token
-      requestBody:
-        description: Credentials object
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserCredentials'
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Token'
-        default:
-          $ref: '#/components/responses/ErrorResponse'
 components:
   schemas:
     UUID:
@@ -277,31 +254,6 @@ components:
         - username
         - email
         - password
-    UserCredentials:
-      type: object
-      properties:
-        username:
-          $ref: '#/components/schemas/Username'
-        password:
-          $ref: '#/components/schemas/Password'
-      required:
-        - username
-        - password
-    Token:
-      type: object
-      properties:
-        token:
-          type: string
-          description: JWT token
-          example: xxxxx.yyyyy.zzzzz
-        username:
-          $ref: '#/components/schemas/Username'
-        email:
-          $ref: '#/components/schemas/Email'
-      required:
-        - token
-        - username
-        - email
     APIError:
       type: object
       properties:

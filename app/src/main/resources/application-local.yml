@@ -13,14 +13,19 @@ spring:
 #        generate_statistics: true # get an idea of actual statements / batches since Hibernate logs can lie
   flyway:
     defaultSchema: packlister
-jwt:
-  secret: Wbd612xiuO19hzU1fotOp5ay5DD7JmSx
+packlister:
+  authserver:
+    client-id: packlister-client
+    issuer: http://localhost:8080
+    allowed-redirect-uris: http://127.0.0.1:3003/authorized,https://oidcdebugger.com/debug
+    rsa-private-key: -----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC/NjViePbVgsjU\nPAbbe5q3O1mX037LdGC8rGbh4ym2fwvyCwcOyVqYnlnmJWo6ZQo2mIETkOrKcGeh\nAx/Z7ny3nRyv+Iixz88aiuAepIcdzaCn/caGaW6ZkIWnaLXtdr0mUGKVNDZJx+N2\noaPF7Ez/0ah/+TDlkXEyxuaER/y5fHOpPXixEEt0Cf1SARRWMrczBktVJ3b6hsDa\n/o4GNVsNGFpQjVTAAVRYtUZcJENLO6gmI1SYE1Zp9ZjX0wD4BTp7+o78ntrV3tEJ\nQU0Bl0Bhux6gAoLzs3ZxCPqjTRPCPEiFhoQjxRVRP4iuboztXNxJAtlYLtPlB94Z\nkCNwkaa/AgMBAAECggEAC92uVG0TTE6wbdNHzakPAd3yAmUCklenhS3huJTjSsr5\nj8y1ZGqEb8Ir7AdYX0VT6+1s3Sz6FRQCqlBKUrjlDnP2iskOmpI91PTXUa9+HxBa\nrvIltsOmNGtuj+QEnjbnKBCG/aFe2RdJe1wukKLIaHu3TDHHogdzkeYb+guJmG0Q\nGMGh46uQgBQeNSowwnxlIWSSn2uvqJbpsTbd3Zh5H25mnjInpXDtRVg1Xviu/c6A\nt4g3pJ0JClUdfiIOpgJi4Op/idDUod2x8FaAnCZWs3t2wTWSEgj3i15WE94nc0+z\nz5hsRvIorJF3BAqzOy5RLbioZCNNx163NaiQzthVQQKBgQD1cDP6sGpYj4QbpP/D\nk/tSKFejpXkJeCUJr2PoHsOQvcUmQZ/c29PatVoCp50fR6Rx4atOQvcLg61vvkAv\nJq6Rl27SB0RIomDVJ6bHHzyPgfOBxeMlTZNyesDrtUKWbi5aNyXSr7vTktRmuqoz\nbMdwSLpMORmiog7LaaDOgpFBIQKBgQDHcKKZLQ8u5wB7TvBzZi4aVq0ksl5bHKAj\nznjnduBXMDJn0zTbz79GglfB5mCeykdtR57JyhV0Cvgq6OHEZ/cdgxUOlESzZIGV\nh5BEILyUr42P18XnBWwkrDOy4/SAYiUGNO7VHsfBGZ41LoNfXRxa0ISYJlc6SItC\nYGK+pw2L3wKBgH5tuOjWvUE3VGblHLbDYL+Wdmae03V0RSfzB/TG/BhwGME3JsEf\nH8dWibI6Yy58uhHLnHGo/xcYUlvwVaG0PFJU/koEYkFEG7tRPJDv30NRPn1H0VUi\n2+QppX0FlvJkeU4RgFNCIO/Af9cXKpto2mdVn1mqRDFJZ3OSyrn1+hrhAoGBAIXj\nG4TxNuwpr60YBVuzEOgln/6ur6FCyk6/YXMh3uEpPe1tYGLgSGwxPHCzE9IFwYWf\nOv4EZ/qLEqbbyBRuJvrs8Mnkx2oW4tdbNoJF59N5NvOFyxmYDk1gPSSu24kEWg6c\nomj4TOlZJVhWbWMrwslEin8J3i0GXlalFiUfSHzJAoGBALxVwtGE1xx0AoM18D8H\na7FwdfVe3kv8d69osP3G6OXJbeUchey3Ulh3yO8G+NpLfzeBtvCPmqX+0mBJwxlc\nrBSg/InMZ3XrnT63zHWPVyHbQ7luMBBYKPae3PsafLAHG5tsS5K0Cr9l2KrKDAxP\nQ91CddAuP0Z+JgACXs5ZuAKg\n-----END PRIVATE KEY-----
 logging:
   level:
     org:
       hibernate:
         SQL: DEBUG
       springframework:
+        security: TRACE
 #        security: DEBUG
         web:
-#          cors: DEBUG
+          cors: DEBUG

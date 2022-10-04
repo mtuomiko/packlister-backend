@@ -3,3 +3,6 @@
 build/
 
 .idea
+
+# avoid any chance of dev env vars swimming into production
+.env.dev

@@ -1,5 +1,5 @@
 server:
-  port: ${PORT}
+  port: ${PORT:8080}
 spring:
   datasource:
     url: ${DATABASE_CONNECTION_URL}
@@ -10,14 +10,18 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-        default_schema: ${DATABASE_SCHEMA}
+        default_schema: ${DATABASE_SCHEMA:packlister}
         jdbc:
           batch_size: 25
   flyway:
-    defaultSchema: ${DATABASE_SCHEMA}
+    defaultSchema: ${DATABASE_SCHEMA:packlister}
     locations: classpath:migrations
-jwt:
-  secret: ${JWT_SECRET}
+packlister:
+  authserver:
+    client-id: ${PACKLISTER_AUTHSERVER_CLIENT_ID}
+    issuer: ${PACKLISTER_AUTHSERVER_ISSUER}
+    allowed-redirect-uris: ${PACKLISTER_AUTHSERVER_ALLOWED_REDIRECT_URIS}
+    rsa-private-key: ${PACKLISTER_AUTHSERVER_RSA_PRIVATE_KEY}
 management:
   endpoint:
     enabled-by-default: false # don't expose unwanted actuator endpoints

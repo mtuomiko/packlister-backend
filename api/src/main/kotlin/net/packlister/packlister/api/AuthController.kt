@@ -1,10 +1,7 @@
 package net.packlister.packlister.api
 
 import net.packlister.packlister.generated.api.AuthApiDelegate
-import net.packlister.packlister.generated.model.Token
 import net.packlister.packlister.generated.model.User
-import net.packlister.packlister.generated.model.UserCredentials
-import net.packlister.packlister.svc.AuthService
 import net.packlister.packlister.svc.UserService
 import net.packlister.packlister.svc.model.UserRegistration
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,9 +12,7 @@ import net.packlister.packlister.generated.model.UserRegistration as APIUserRegi
 @RestController
 class AuthController(
     @Autowired
-    private val userService: UserService,
-    @Autowired
-    private val authService: AuthService
+    private val userService: UserService
 ) : AuthApiDelegate {
     override fun register(userRegistration: APIUserRegistration): ResponseEntity<User> {
         val user = userService.register(
@@ -31,16 +26,6 @@ class AuthController(
             id = user.id
             username = user.username
             email = user.email
-        }
-        return ResponseEntity.ok(response)
-    }
-
-    override fun token(userCredentials: UserCredentials): ResponseEntity<Token> {
-        val tokenWithUser = authService.token(userCredentials.username, userCredentials.password)
-        val response = Token().apply {
-            token = tokenWithUser.token
-            username = tokenWithUser.username
-            email = tokenWithUser.email
         }
         return ResponseEntity.ok(response)
     }
