@@ -17,11 +17,12 @@ spring:
     defaultSchema: ${DATABASE_SCHEMA:packlister}
     locations: classpath:migrations
 packlister:
-  authserver:
-    client-id: ${PACKLISTER_AUTHSERVER_CLIENT_ID}
-    issuer: ${PACKLISTER_AUTHSERVER_ISSUER}
-    allowed-redirect-uris: ${PACKLISTER_AUTHSERVER_ALLOWED_REDIRECT_URIS}
-    rsa-private-key: ${PACKLISTER_AUTHSERVER_RSA_PRIVATE_KEY}
+  auth:
+    secure-cookie: true
+    domain: ${PACKLISTER_AUTH_DOMAIN}
+    issuer: ${PACKLISTER_AUTH_ISSUER}
+    allowed-origin: ${PACKLISTER_AUTH_ALLOWED_ORIGIN}
+    jwt-secret: ${PACKLISTER_AUTH_JWT_SECRET}
 management:
   endpoint:
     enabled-by-default: false # don't expose unwanted actuator endpoints

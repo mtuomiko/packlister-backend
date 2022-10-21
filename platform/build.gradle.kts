@@ -24,7 +24,5 @@ dependencies {
         api("${Libs.swaggerAnnotations}:${Versions.swaggerAnnotations}")
 
         api("${Libs.hibernateTypes}:${Versions.hibernateTypes}")
-
-        api("${Libs.Spring.authorizationServer}:${Versions.authorizationServer}")
     }
 }

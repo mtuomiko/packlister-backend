@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.Detekt
 plugins {
     id(Plugins.detekt).version(Versions.detekt)
     id(Plugins.spotless).version(Versions.spotless)
-    id("jacoco-report-aggregation")
+    id(Plugins.jacocoReportAggregation)
 }
 
 repositories {
@@ -37,6 +37,9 @@ tasks.named("jacocoMerged", JacocoReport::class).configure {
             }
         )
     )
+    reports {
+        csv.required.set(true)
+    }
 }
 
 detekt {
@@ -45,7 +48,7 @@ detekt {
 }
 
 tasks.withType<Detekt>().configureEach {
-    jvmTarget = "17"
+    jvmTarget = Target.jvmTarget
     reports { // console output and possible failure enough for now
         xml.required.set(false)
         html.required.set(false)

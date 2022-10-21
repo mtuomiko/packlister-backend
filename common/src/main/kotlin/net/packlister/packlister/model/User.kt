@@ -8,7 +8,8 @@ data class User(
     val id: UUID,
     private val username: String, // prevent clash with UserDetails
     val email: String,
-    val passwordHash: String
+    val passwordHash: String,
+    val active: Boolean
 ) : UserDetails {
     override fun getPassword(): String = passwordHash
     override fun getUsername(): String = username
@@ -17,7 +18,7 @@ data class User(
     override fun isAccountNonExpired() = true
     override fun isAccountNonLocked() = true
     override fun isCredentialsNonExpired() = true
-    override fun isEnabled() = true
+    override fun isEnabled() = active
 
     // no distinct authorities handled
     override fun getAuthorities() = listOf(SimpleGrantedAuthority("USER"))

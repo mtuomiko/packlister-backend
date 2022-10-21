@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration
  * autoconfiguration it makes) is not visible to this project. Autoconfiguration here allows us to easily pickup
  * entities, repositories and so on, and use @DataJpaTest in test classes.
  *
- * Improve: Declare properties only in single place? (see resources/application.yml)
+ * Improve: Declare properties only in single place (see resources/application.yml for this module)
  */
 @SpringBootConfiguration
 @EnableAutoConfiguration

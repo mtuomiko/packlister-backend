@@ -11,8 +11,10 @@ dependencies {
     implementation("org.springframework:spring-context") // global configuration
 
     // PasswordEncoder, UserDetails & common access to user info from JWT claims
-    implementation("org.springframework.security:spring-security-oauth2-resource-server")
-    implementation("org.springframework.security:spring-security-oauth2-jose")
+    implementation(Libs.Spring.securityOauth2ResourceServer)
+    implementation(Libs.Spring.securityOauth2Jose)
+
+    implementation(Libs.Spring.bootStarterValidation)
 
     implementation(Libs.jacksonModuleKotlin) // ObjectMapper configuration
 }

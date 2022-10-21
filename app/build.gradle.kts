@@ -16,11 +16,9 @@ dependencies {
     implementation(Libs.Spring.bootStarterSecurity)
     implementation(Libs.Spring.bootStarterDataJpa)
     implementation(Libs.Spring.bootStarterActuator)
-    implementation("org.springframework.boot:spring-boot-starter-validation")
+
     implementation(Libs.jacksonModuleKotlin)
     implementation(Libs.Spring.bootStarterOauthResourceServer)
-    implementation(Libs.Spring.authorizationServer)
-    implementation("org.bouncycastle:bcpkix-jdk18on:1.72")
 }
 
 // don't build plain jar (only fat one used)

@@ -1,8 +1,6 @@
 package net.packlister.packlister.dao.entity
 
-import net.packlister.packlister.model.Category
-import net.packlister.packlister.model.Packlist
-import org.hibernate.annotations.Type
+import net.packlister.packlister.dao.model.RefreshToken
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
@@ -15,16 +13,15 @@ import javax.persistence.Id
 import javax.persistence.Table
 
 @Entity
-@Table(name = "packlists")
+@Table(name = "refresh_tokens")
 @EntityListeners(AuditingEntityListener::class)
-class PacklistEntity(
+class RefreshTokenEntity(
     @Id
     val id: UUID,
-    val name: String?,
-    val description: String?,
-    @Type(type = "com.vladmihalcea.hibernate.type.json.JsonType")
-    @Column(name = "content", columnDefinition = "jsonb")
-    val categories: List<Category>,
+    val token: String,
+    val family: UUID,
+    @Column(name = "expires_at")
+    val expiresAt: Instant,
     @Column(name = "account_id")
     val userId: UUID
 ) {
@@ -35,5 +32,5 @@ class PacklistEntity(
     @Column(updatable = false)
     lateinit var createdAt: Instant
 
-    fun toModel() = with(this) { Packlist(id, name, description, categories) }
+    fun toModel() = with(this) { RefreshToken(id, token, family, expiresAt, userId) }
 }

@@ -20,7 +20,8 @@ class UserDao(
             id = UUID.randomUUID(),
             username = newUser.username,
             email = newUser.email,
-            passwordHash = newUser.passwordHash
+            passwordHash = newUser.passwordHash,
+            active = true
         )
 
         userRepository.persist(userEntity)

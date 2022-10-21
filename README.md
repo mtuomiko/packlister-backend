@@ -1,6 +1,7 @@
 # Packlister
 
-Deployed to Railway.app at https://packlister-production.up.railway.app (still some deficiencies like no frontend :x)
+This is the backend service repository for Packlister application, which is deployed at https://packlister.onrender.com
+with separate backend (this project) deployed to `packlister-svc.onrender.com`. Still work in progress...
 
 ## Modules
 
@@ -10,19 +11,18 @@ Actual Spring Boot application and configuration. Produces the final jar.
 
 ### common
 
-Common configuration, and DTO models.
+Common configuration, and DTO models. Available to all other (application) modules.
 
 ### gen
 
-Contains API specs in OpenAPI v3 format in `api.yml`. Creates API models and delegate pattern interfaces as Java code
-for Spring controllers to implement.
+Contains API specs in OpenAPI v3 format in [api.yml](/gen/api.yml). Creates API models and delegate pattern interfaces
+as Java code for Spring controllers to implement.
 
 Caveats:
 
-* `spring` generator (possibly wider issue?) only supports a single response net.packlister.packlister.model. Working
-  around this by wrapping any response in an object that can also contain errors, so we can explicitly return an error
-  from the controller. Makes the API docs a bit confusing though as the successful responses will not contain errors and
-  failure responses will. Though looks the issue can also be bypassed with ExceptionHandlers.
+`spring generator` for OpenAPI only supports a single response model which limits options for error situations. Direct
+error return from the Spring controller would require that the error model is a part of the single response model.
+Currently working around the issue by using ExceptionHandlers meaning any error codes must go through Exceptions.
 
 ### api
 
@@ -34,61 +34,63 @@ Service level logic.
 
 ### dao
 
-Persistence level. Handles JPA entities & repos. Runs migrations with Flyway.
+Persistence level. Handles JPA entities & repos. Runs migrations with Flyway. Migrations stored
+at `dao/src/main/resources/migrations/`.
 
 ## Authentication and authorization
 
-Application is configured both as a OAuth 2.0 Resource Server and as an Authorization Server at the same time. This
-doesn't make much sense in practice, but I wanted to try out the relatively
-new [spring-authorization-server](https://github.com/spring-projects/spring-authorization-server) which should get its
-`1.0.0` major release in November 2022. Authorization server setup is fairly limited in this project, it does not use
-for example any DB tables, so it's a pretty static configuration.
+Application is configured as a Spring OAuth 2.0 Resource Server consuming self issued JWTs. I tried out the
+newish [spring-authorization-server](https://github.com/spring-projects/spring-authorization-server) (which should get
+its `1.0.0` major release in November 2022) but it didn't really make any practical sense for this project. Configuring
+the application both as a fully-capable Authorization Server and also a Resource Server at the same time was just goofy.
+External IDPs were also an option.
 
-The authorization server is configured for a single public client, that is, the packlister frontend. The only supported
-OAuth 2.0 authorization flow is the authorization code flow with Proof Key for Code Exchange (PKCE). JWT signing uses
-RS256 based on private key. See [Environment variables](#environment-variables).
+The setup uses self issued HS256 signed bearer tokens with the access tokens used
+"normally" on the request `Authorization` header and the refresh tokens set as a `HttpOnly` cookie on the
+auth paths.
 
-Using long-life access tokens since Spring Authorization Server does not allow refresh tokens for public clients due to
-inherent issues with securing them in the browser. Note, this is not a good idea in practice! It will have to suffice
-for now for this POC.
+Refresh tokens are rotated automatically and their reuse will invalidate any refresh token originating from the same
+login. The original refresh token created using user credentials (username, password) is issued a random family UUID
+that is retained by all subsequent refresh tokens. If refresh token reuse is detected, then that family is no longer
+valid forcing all actors to re-authenticate. Access tokens are not revoked.
 
-Authorization server endpoints should be available through `/.well-known/oauth-authorization-server` endpoint. They are
-not listed in the API yaml for generated code.
+I feel like the security configuration is kinda bordering on violating "don't roll your own crypto" principle with
+manual creation of tokens and manual checking of refresh tokens, but it was interesting to implement.
+
+## Environment variables
+
+| Variable                         | Description                                                                                                                                 | Default value | Required | Example                                                        |
+|----------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|---------------|----------|----------------------------------------------------------------|
+| `PORT`                           | Application port                                                                                                                            | `8080`        |          |                                                                |
+| `DATABASE_CONNECTION_URL`        | JDBC connection URL                                                                                                                         |               | ✓        | `jdbc:postgresql://host.docker.internal:5432/packlister`       |
+| `DATABASE_CONNECTION_USERNAME`   | DB username                                                                                                                                 |               | ✓        | `postgres`                                                     |
+| `DATABASE_CONNECTION_PASSWORD`   | DB password                                                                                                                                 |               | ✓        | `Hunter2`                                                      |
+| `DATABASE_SCHEMA`                | DB schema                                                                                                                                   | `packlister`  |          |                                                                |
+| `PACKLISTER_AUTH_DOMAIN`         | Domain setting for refresh token cookies                                                                                                    |               | ✓        | `localhost`, `packlister-svc.onrender.com`                     |
+| `PACKLISTER_AUTH_ISSUER`         | JWT token issuer. Does not necessarily need to be the server URL, but following OIDC specs here (not that they really matter in this case). |               | ✓        | `http://localhost:8080`, `https://packlister-svc.onrender.com` |
+| `PACKLISTER_AUTH_ALLOWED_ORIGIN` | Single allowed origin for CORS, set as the frontend URL                                                                                     |               | ✓        | `http://localhost:3003`, `https://packlister.onrender.com`     |
+| `PACKLISTER_AUTH_JWT_SECRET`     | Base64 encoded secret key for JWT signing. Must be 512 bits (64 bytes) in size (before encoding).                                           |               | ✓        |                                                                |
+
+Base64 encoded 64 byte secret key can be generated, for
+example, using `dd if=/dev/urandom bs=64 count=1 2>/dev/null | base64`.
 
 ## Development
 
 App assumes an existing PostgreSQL database to be available at `postgresql://localhost:5432/packlister` with
 credentials `postgres:Hunter2` when running with `local` profile.
 
-Run one with docker using for
-example `docker run -d --restart unless-stopped --name dev-postgres -p 5432:5432 -e POSTGRES_DB=packlister -e POSTGRES_PASSWORD=Hunter2 postgres:14`
+Run one for example with docker
+using `docker run -d --restart unless-stopped --name dev-postgres -p 5432:5432 -e POSTGRES_DB=packlister -e POSTGRES_PASSWORD=Hunter2 postgres:14`
 
-Run locally using Gradle task `bootRun` using `local` profile, for example by providing env
+Run application locally using Gradle task `bootRun` using `local` profile, for example by providing env
 var `SPRING_PROFILES_ACTIVE=local`.
-
-## Environment variables
-
-| Variable                                    | Description                                                                                              | Default value | Required | Example                                                               |
-|---------------------------------------------|----------------------------------------------------------------------------------------------------------|---------------|----------|-----------------------------------------------------------------------|
-| PORT                                        | Application port                                                                                         | `8080`        |          |                                                                       |
-| DATABASE_CONNECTION_URL                     | JDBC connection URL                                                                                      |               | ✓        | `jdbc:postgresql://host.docker.internal:5432/packlister`              |
-| DATABASE_CONNECTION_USERNAME                | DB username                                                                                              |               | ✓        | `postgres`                                                            |
-| DATABASE_CONNECTION_PASSWORD                | DB password                                                                                              |               | ✓        | `Hunter2`                                                             |
-| DATABASE_SCHEMA                             | DB schema                                                                                                | `packlister`  |          |                                                                       |
-| PACKLISTER_AUTHSERVER_CLIENT_ID             | Identifier for the single supported public client of the authorization server                            |               | ✓        | `packlister-client    `                                               |
-| PACKLISTER_AUTHSERVER_ISSUER                | Authorization server issuer, an URI                                                                      |               | ✓        | `http://localhost:8080`                                               |
-| PACKLISTER_AUTHSERVER_ALLOWED_REDIRECT_URIS | Comma separated list of allowed redirect uris for authorization server used in `authorization_code` flow |               |          | `http://localhost:3003/authorized,https://oidcdebugger.com/debug`     |
-| PACKLISTER_AUTHSERVER_RSA_PRIVATE_KEY       | PEM format RSA private key. Allows newline escaping. Example uses escaped newlines.                      |               | ✓        | `-----BEGIN PRIVATE KEY-----\nSTUFF\nHERE\n-----END PRIVATE KEY-----` |
-
-RSA key can be generated using, for example, `openssl genrsa -out key.pem 2048`. Newlines can be kept as is or escaped
-by converting them to `\n`.
 
 ### Containerized
 
-File `.env.dev` has an example of needed env vars for running the image. Database host (example
-used `host.docker.internal`) might vary depending on setup.
+File [`.env.dev`](.env.dev) has an example of needed env vars for running the image. Database host (example
+used `host.docker.internal`) might vary depending on your setup.
 
-Example commands
+Example commands using docker
 
-* build image `docker build -t packlister .`
+* build image `docker build -t packlister .` (remember to build the jar beforehand)
 * run `docker run --rm -it -p 8080:8080 --env-file ./.env.dev packlister`

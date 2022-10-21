@@ -1,3 +1,5 @@
+# dao configuration for running tests independent of the whole spring application
+# improve: this is doubled from app config
 spring:
   datasource:
     url: 'jdbc:postgresql://localhost:5432/packlister'
@@ -10,4 +12,4 @@ spring:
         default_schema: packlister
   flyway:
     defaultSchema: packlister
-    locations: classpath:migrations # improve: this is doubled from app config
+    locations: classpath:migrations

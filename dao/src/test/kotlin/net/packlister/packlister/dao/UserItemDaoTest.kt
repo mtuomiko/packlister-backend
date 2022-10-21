@@ -15,10 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing
 import java.util.UUID
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@EnableJpaAuditing
 class UserItemDaoTest(
     @Autowired
     private val userItemRepository: UserItemRepository,
@@ -34,7 +36,13 @@ class UserItemDaoTest(
         val ids = listOf(testUserId1, testUserId2)
         userRepository.persistAllAndFlush(
             ids.mapIndexed { i, id ->
-                UserEntity(id = id, username = "user$i", email = "user$i@mail.com", passwordHash = "hash")
+                UserEntity(
+                    id = id,
+                    username = "user$i",
+                    email = "user$i@mail.com",
+                    passwordHash = "hash",
+                    active = true
+                )
             }
         )
     }
@@ -128,8 +136,11 @@ class UserItemDaoTest(
     }
 
     private fun UserItem.equalToEntityWithUserId(entity: UserItemEntity, userId: UUID): Boolean {
-        return entity.id == this.id && entity.name == this.name && entity.description == this.description &&
-            entity.weight == this.weight && entity.publicVisibility == this.publicVisibility &&
+        return entity.id == this.id &&
+            entity.name == this.name &&
+            entity.description == this.description &&
+            entity.weight == this.weight &&
+            entity.publicVisibility == this.publicVisibility &&
             entity.userId == userId
     }
 

@@ -1,3 +1,5 @@
+import org.gradle.api.JavaVersion
+
 object Libs {
     object Spring {
         const val bootStarterWeb = "org.springframework.boot:spring-boot-starter-web"
@@ -6,7 +8,9 @@ object Libs {
         const val bootStarterSecurity = "org.springframework.boot:spring-boot-starter-security"
         const val bootStarterTest = "org.springframework.boot:spring-boot-starter-test"
         const val bootStarterOauthResourceServer = "org.springframework.boot:spring-boot-starter-oauth2-resource-server"
-        const val authorizationServer = "org.springframework.security:spring-security-oauth2-authorization-server"
+        const val securityOauth2ResourceServer = "org.springframework.security:spring-security-oauth2-resource-server"
+        const val securityOauth2Jose = "org.springframework.security:spring-security-oauth2-jose"
+        const val bootStarterValidation = "org.springframework.boot:spring-boot-starter-validation"
     }
 
     const val kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
@@ -29,7 +33,6 @@ object Versions {
     const val kotlin = "1.6.21" // change version also in buildSrc/build.gradle.kts
 
     const val springBoot = "2.7.3"
-    const val authorizationServer = "0.3.1"
 
     const val hibernateTypes = "2.19.2"
 
@@ -48,5 +51,11 @@ object Plugins {
 
     const val detekt = "io.gitlab.arturbosch.detekt"
     const val spotless = "com.diffplug.spotless"
+    const val jacocoReportAggregation = "jacoco-report-aggregation"
     const val openApiGenerator = "org.openapi.generator"
+}
+
+object Target {
+    const val jvmTarget = "17"
+    val javaVersion = JavaVersion.VERSION_17
 }

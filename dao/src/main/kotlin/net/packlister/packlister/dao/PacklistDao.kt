@@ -26,9 +26,7 @@ class PacklistDao(
 
     fun getOnePacklist(userId: UUID, packlistId: UUID): Packlist? {
         val packlistOpt = packlistRepository.findById(packlistId)
-        if (packlistOpt.isEmpty) {
-            return null
-        }
+        if (packlistOpt.isEmpty) return null
 
         val packlist = packlistOpt.get()
         if (packlist.userId != userId) {

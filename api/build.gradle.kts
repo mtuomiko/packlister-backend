@@ -11,5 +11,5 @@ dependencies {
     implementation(project(":gen"))
     implementation(project(":svc"))
 
-    implementation("org.springframework.security:spring-security-core") // PasswordEncoder
+    implementation("org.springframework.security:spring-security-oauth2-jose")
 }
