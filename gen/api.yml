@@ -321,6 +321,9 @@ components:
       properties:
         message:
           type: string
+        target:
+          type: string
+      required: [message]
     APIErrorArray:
       type: array
       items:
@@ -328,6 +331,10 @@ components:
     ErrorWrapper:
       type: object
       properties:
+        status:
+          type: integer
+        message:
+          type: string
         errors:
           $ref: '#/components/schemas/APIErrorArray'
     UserItemsResponse:

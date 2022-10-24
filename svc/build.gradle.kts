@@ -13,4 +13,6 @@ dependencies {
     // PasswordEncoder, JwtEncoder...
     implementation("org.springframework.security:spring-security-oauth2-jose")
     implementation("org.springframework:spring-tx") // transaction exceptions
+
+    implementation(Libs.javaxValidationApi)
 }

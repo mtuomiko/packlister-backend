@@ -11,13 +11,14 @@ import org.springframework.security.crypto.password.PasswordEncoder
 @Configuration
 class GlobalConfig {
     /**
-     * Made globally available since used in app configuration and on svc level
+     * Made globally available since used in app configuration and on service level
      */
     @Bean
     fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
 
     /**
-     * Explicit ObjectMapper configuration. Hopefully avoids any confusion from default in the future.
+     * Explicit Jackson ObjectMapper configuration. Hopefully avoids any confusion resulting from the Spring default
+     * configuration in the future.
      */
     @Bean
     fun objectMapper(): ObjectMapper {

@@ -6,6 +6,8 @@ plugins {
 
 dependencies {
     implementation(Libs.Spring.bootStarterWeb)
+    implementation(Libs.microutilsKotlinLogging)
+    implementation(Libs.slf4jApi)
 
     testImplementation(Libs.Spring.bootStarterTest)
     testImplementation(Libs.mockitoKotlin)

@@ -6,5 +6,5 @@ import java.util.Optional
 import java.util.UUID
 
 interface UserRepository : JpaRepository<UserEntity, UUID>, HibernateRepository<UserEntity> {
-    fun findByUsername(username: String): Optional<UserEntity>
+    fun findByUsernameIgnoreCase(username: String): Optional<UserEntity>
 }

@@ -30,7 +30,7 @@ class UserDao(
     }
 
     fun getByUsername(username: String): User? {
-        val user = userRepository.findByUsername(username)
+        val user = userRepository.findByUsernameIgnoreCase(username)
         return if (user.isPresent) {
             user.get().toModel()
         } else {

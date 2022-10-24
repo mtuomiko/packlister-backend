@@ -12,6 +12,8 @@ object Libs {
         const val securityOauth2Jose = "org.springframework.security:spring-security-oauth2-jose"
         const val bootStarterValidation = "org.springframework.boot:spring-boot-starter-validation"
     }
+    const val slf4jApi = "org.slf4j:slf4j-api"
+    const val microutilsKotlinLogging = "io.github.microutils:kotlin-logging-jvm"
 
     const val kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     const val kotlinReflect = "org.jetbrains.kotlin:kotlin-reflect"
@@ -38,6 +40,8 @@ object Versions {
 
     const val openApiGenerator = "6.0.1"
     const val swaggerAnnotations = "2.2.2"
+
+    const val microutilsKotlinLogging = "2.1.23" // match slf4j version 1.x
 
     const val detekt = "1.21.0"
     const val spotless = "6.10.0"

@@ -17,12 +17,14 @@ dependencies {
     // declare all dependency version constraints here unless defined in platform BOMs
     constraints {
         // override mockito version due to mockito-kotlin using an older version
-        // improve: not actually working, figure out
+        // improve: ^ not actually working, figure out
         api("${Libs.mockitoCore}:${Versions.mockito}")
         api("${Libs.mockitoKotlin}:${Versions.mockito}")
 
         api("${Libs.swaggerAnnotations}:${Versions.swaggerAnnotations}")
 
         api("${Libs.hibernateTypes}:${Versions.hibernateTypes}")
+
+        api("${Libs.microutilsKotlinLogging}:${Versions.microutilsKotlinLogging}")
     }
 }
