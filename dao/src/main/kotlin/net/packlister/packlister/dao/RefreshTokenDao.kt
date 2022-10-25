@@ -1,17 +1,21 @@
 package net.packlister.packlister.dao
 
+import mu.KotlinLogging
 import net.packlister.packlister.dao.entity.RefreshTokenEntity
 import net.packlister.packlister.dao.model.RefreshToken
 import net.packlister.packlister.dao.repository.RefreshTokenRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
+import java.time.InstantSource
 import java.util.UUID
 import javax.transaction.Transactional
 
+private val logger = KotlinLogging.logger {}
+
 @Component
 class RefreshTokenDao(
-    @Autowired
-    private val refreshTokenRepository: RefreshTokenRepository
+    @Autowired private val refreshTokenRepository: RefreshTokenRepository,
+    @Autowired private val instantSource: InstantSource
 ) {
     @Transactional
     fun create(refreshToken: RefreshToken) {
@@ -27,10 +31,7 @@ class RefreshTokenDao(
     }
 
     fun getByTokenFamily(tokenFamily: UUID): RefreshToken? {
-        val entityOpt = refreshTokenRepository.findByFamily(tokenFamily)
-        if (entityOpt.isEmpty) return null
-
-        return entityOpt.get().toModel()
+        return refreshTokenRepository.findByFamily(tokenFamily)?.toModel()
     }
 
     fun deleteById(id: UUID) {
@@ -40,5 +41,20 @@ class RefreshTokenDao(
     @Transactional
     fun deleteByTokenFamily(tokenFamily: UUID) {
         refreshTokenRepository.deleteByFamily(tokenFamily)
+    }
+
+    /**
+     * Clear expired refresh tokens from database every night 02:35 server time. Should have no security impact, expired
+     * tokens should be treated practically the same as non-existing ones.
+     */
+
+    @Transactional
+    fun deleteExpired(): Int {
+        val expiredTokens = refreshTokenRepository.findByExpiresAtIsBefore(instantSource.instant())
+        return if (expiredTokens.isNotEmpty()) {
+            refreshTokenRepository.bulkDeleteWithIds(expiredTokens.map { it.id })
+        } else {
+            0
+        }
     }
 }

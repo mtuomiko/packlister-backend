@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
+import java.time.InstantSource
 
 @Configuration
 class GlobalConfig {
@@ -32,6 +33,15 @@ class GlobalConfig {
                 .configure(KotlinFeature.StrictNullChecks, false)
                 .build()
         )
+    }
+
+    /**
+     * Interface for accessing clock without any extraneous timezone features. Any domain logic will probably not have
+     * any need for handling timezones (they are representational/UI related). This bean should also help with testing.
+     * */
+    @Bean
+    fun instantSource(): InstantSource {
+        return InstantSource.system()
     }
 }
 

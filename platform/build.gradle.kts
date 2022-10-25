@@ -14,8 +14,9 @@ javaPlatform {
 dependencies {
     api(platform("org.springframework.boot:spring-boot-dependencies:${Versions.springBoot}"))
 
-    // declare all dependency version constraints here unless defined in platform BOMs
     constraints {
+        // declare all dependency version constraints here unless the version is defined in platform BOMs
+
         // override mockito version due to mockito-kotlin using an older version
         // improve: ^ not actually working, figure out
         api("${Libs.mockitoCore}:${Versions.mockito}")

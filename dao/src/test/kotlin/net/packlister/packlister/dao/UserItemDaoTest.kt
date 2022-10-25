@@ -1,6 +1,7 @@
 package net.packlister.packlister.dao
 
 import model.UserItemBuilder
+import net.packlister.packlister.dao.builders.UserItemEntityBuilder
 import net.packlister.packlister.dao.entity.UserEntity
 import net.packlister.packlister.dao.entity.UserItemEntity
 import net.packlister.packlister.dao.repository.UserItemRepository

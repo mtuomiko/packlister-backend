@@ -1,13 +1,17 @@
 # Packlister
 
-This is the backend service repository for Packlister application, which is deployed at https://packlister.onrender.com
-with separate backend (this project) deployed to `packlister-svc.onrender.com`. Still work in progress...
+This is the backend service repository for Packlister, a hobby project aiming to
+replicate [LighterPack](https://lighterpack.com/). The application is deployed at https://packlister.onrender.com with
+a separate backend (this project) deployed to `packlister-svc.onrender.com`. Still work in progress...
 
 ## Modules
 
+The application has been split to subprojects / modules in an effort to promote separation of concerns and enforce
+sensible dependencies between the modules.
+
 ### app
 
-Actual Spring Boot application and configuration. Produces the final jar.
+Actual Spring Boot application and configuration. Produces the final fat JAR file.
 
 ### common
 
@@ -16,13 +20,15 @@ Common configuration, and DTO models. Available to all other (application) modul
 ### gen
 
 Contains API specs in OpenAPI v3 format in [api.yml](/gen/api.yml). Creates API models and delegate pattern interfaces
-as Java code for Spring controllers to implement.
+as Java code for the Spring controllers to implement.
 
 Caveats:
 
-`spring generator` for OpenAPI only supports a single response model which limits options for error situations. Direct
-error return from the Spring controller would require that the error model is a part of the single response model.
-Currently working around the issue by using ExceptionHandlers meaning any error codes must go through Exceptions.
+`spring generator` for OpenAPI only supports a single response model which limits the options for error situations.
+Direct return from the Spring controller in case of a failure would require that the error model is an optional part of
+the single response model, which gets a bit messy. Currently working around the issue by using ExceptionHandlers meaning
+all failures are handled through Exceptions since that allows us to bypass the response model for a successful
+operation.
 
 ### api
 
@@ -34,8 +40,22 @@ Service level logic.
 
 ### dao
 
-Persistence level. Handles JPA entities & repos. Runs migrations with Flyway. Migrations stored
+Persistence level. Handles JPA entities and repositories. Runs migrations with Flyway. Migrations stored
 at `dao/src/main/resources/migrations/`.
+
+### buildSrc
+
+Gradle Kotlin source code used for building the application. Contains names and versions (unless coming from Spring
+BOMs) for libraries and plugins. Also has common module gradle configurations (conventions).
+
+### platform
+
+Java platform subproject (see
+[The Java Platform Gradle Plugin](https://docs.gradle.org/current/userguide/java_platform_plugin.html)) enforcing
+dependency versions project-wide. All dependency **versions** should be declared here, not directly in the subproject
+where they are used. Most of the dependency versions come directly
+from [Spring Boot Dependencies BOM](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies)
+and do not need to be manually handled.
 
 ## Authentication and authorization
 
@@ -87,10 +107,13 @@ var `SPRING_PROFILES_ACTIVE=local`.
 
 ### Containerized
 
+The image is built using [`Dockerfile`](Dockerfile). [jib](https://github.com/GoogleContainerTools/jib) would probably
+make a lot more sense for building the image but render.com deployment forces our hand.
+
 File [`.env.dev`](.env.dev) has an example of needed env vars for running the image. Database host (example
-used `host.docker.internal`) might vary depending on your setup.
+uses `host.docker.internal`) might vary depending on your setup.
 
 Example commands using docker
 
-* build image `docker build -t packlister .` (remember to build the jar beforehand)
+* build image `docker build -t packlister .` (remember to build the fat JAR beforehand)
 * run `docker run --rm -it -p 8080:8080 --env-file ./.env.dev packlister`

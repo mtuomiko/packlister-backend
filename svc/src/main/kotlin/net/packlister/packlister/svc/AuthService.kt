@@ -1,5 +1,6 @@
 package net.packlister.packlister.svc
 
+import mu.KotlinLogging
 import net.packlister.packlister.config.AuthConfigProperties
 import net.packlister.packlister.dao.RefreshTokenDao
 import net.packlister.packlister.dao.UserDao
@@ -9,6 +10,7 @@ import net.packlister.packlister.model.UnauthorizedError
 import net.packlister.packlister.model.User
 import net.packlister.packlister.svc.model.TokensWithUserInfo
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm
@@ -19,27 +21,26 @@ import org.springframework.security.oauth2.jwt.JwtEncoder
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters
 import org.springframework.stereotype.Component
 import java.time.Instant
+import java.time.InstantSource
 import java.util.UUID
+
+private val logger = KotlinLogging.logger {}
 
 @Component
 class AuthService(
-    @Autowired
-    private val authenticationManager: AuthenticationManager,
-    @Autowired
-    private val jwtEncoder: JwtEncoder,
-    @Autowired
-    private val refreshTokenDao: RefreshTokenDao,
-    @Autowired
-    private val userDao: UserDao,
-    @Autowired
-    private val authConfigProperties: AuthConfigProperties
+    @Autowired private val authenticationManager: AuthenticationManager,
+    @Autowired private val jwtEncoder: JwtEncoder,
+    @Autowired private val refreshTokenDao: RefreshTokenDao,
+    @Autowired private val userDao: UserDao,
+    @Autowired private val authConfigProperties: AuthConfigProperties,
+    @Autowired private val instantSource: InstantSource
 ) {
     fun token(username: String, password: String): TokensWithUserInfo {
         val user = authenticationManager.authenticate(
             UsernamePasswordAuthenticationToken(username, password)
         ).principal as User
 
-        val now = Instant.now()
+        val now = instantSource.instant()
         val tokenFamily = UUID.randomUUID()
         val tokenPair = createTokens(user, tokenFamily, now)
 
@@ -70,16 +71,16 @@ class AuthService(
         val storedToken = refreshTokenDao.getByTokenFamily(tokenFamily)
             ?: throw UnauthorizedError("no stored token found")
 
+        val now = instantSource.instant()
         if (storedToken.token != refreshToken.tokenValue) {
             refreshTokenDao.deleteById(storedToken.id)
             throw UnauthorizedError("refresh token not matching")
         }
-        if (storedToken.expiresAt.isBefore(Instant.now())) {
+        if (storedToken.expiresAt.isBefore(now)) {
             refreshTokenDao.deleteById(storedToken.id)
             throw UnauthorizedError("refresh token expired")
         }
 
-        val now = Instant.now()
         val tokenPair = createTokens(user, tokenFamily, now)
 
         refreshTokenDao.deleteById(storedToken.id)
@@ -121,6 +122,13 @@ class AuthService(
         val refreshToken = jwtEncoder.encode(JwtEncoderParameters.from(header, refreshTokenClaims)).tokenValue
 
         return TokenPair(accessToken, refreshToken)
+    }
+
+    @Suppress("UnusedPrivateMember")
+    @Scheduled(cron = "0 35 2 * * *")
+    private fun deleteExpiredRefreshTokens() {
+        val deletedCount = refreshTokenDao.deleteExpired()
+        logger.info { "Periodic deletion of expired refresh tokens deleted $deletedCount occurrences" }
     }
 
     class TokenPair(val accessToken: String, val refreshToken: String)

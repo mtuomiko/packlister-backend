@@ -1,4 +1,4 @@
-package net.packlister.packlister.dao
+package net.packlister.packlister.dao.builders
 
 import net.packlister.packlister.dao.entity.UserItemEntity
 import java.util.UUID
