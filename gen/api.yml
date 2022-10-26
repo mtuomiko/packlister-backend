@@ -417,7 +417,7 @@ components:
           schema:
             $ref: '#/components/schemas/TokenResponse'
     ErrorResponse:
-      description: Generic error response containing an array of errors
+      description: Generic error response containing a status code and message with an array of errors.
       content:
         application/json:
           schema:

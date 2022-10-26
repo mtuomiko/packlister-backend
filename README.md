@@ -3,8 +3,8 @@
 This is the backend service repository for Packlister, a hobby project aiming to provide a similar service
 as [LighterPack](https://lighterpack.com/).
 
-**Note! Application backend is deployed on a free plan at render.com which has very conservative resource limits and
-also suspends inactive services. Starting a new instance of the backend can take up to 5 minutes!**
+**Note! Application backend is deployed on [render.com](https://render.com/) free plan which has very conservative
+resource limits and also suspends inactive services. Starting a new instance of the backend can take up to 5 minutes!**
 
 The application frontend is deployed at https://packlister.onrender.com with a separate backend (this project) deployed
 to `packlister-svc.onrender.com`. Still work in progress...
