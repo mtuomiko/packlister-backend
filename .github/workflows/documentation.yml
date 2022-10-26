@@ -14,8 +14,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       # documentation branch expects API file to reside at root
-      - name: Move to root and stage
+      - name: Update the file from triggering commit and stage
         run: |
+          git checkout documentation
+          git checkout ${{ github.sha }} gen/api.yml
+          rm api.yml
           mv gen/api.yml .
           git add api.yml
       - name: Commit
