@@ -24,8 +24,13 @@ Common configuration, and DTO models. Available to all other (application) modul
 
 ### gen
 
-Contains API specs in OpenAPI v3 format in [api.yml](/gen/api.yml). Creates API models and delegate pattern interfaces
-as Java code for the Spring controllers to implement.
+Generates API models and delegate pattern interfaces as Java code for the project Spring controllers (api module) to
+implement. Intent is to enforce that the actual implementation does not deviate from the API specification as the
+response models are generated from the specification.
+
+Contains API specs in OpenAPI v3.0 format in [api.yml](/gen/api.yml). You can see the API specs in a more visually
+pleasing form rendered with [Swagger UI](https://github.com/swagger-api/swagger-ui)
+at https://mtuomiko.github.io/packlister-backend/.
 
 Caveats:
 
