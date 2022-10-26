@@ -1,8 +1,13 @@
 # Packlister
 
-This is the backend service repository for Packlister, a hobby project aiming to
-replicate [LighterPack](https://lighterpack.com/). The application is deployed at https://packlister.onrender.com with
-a separate backend (this project) deployed to `packlister-svc.onrender.com`. Still work in progress...
+This is the backend service repository for Packlister, a hobby project aiming to provide a similar service
+as [LighterPack](https://lighterpack.com/).
+
+**Note! Application backend is deployed on a free plan at render.com which has very conservative resource limits and
+also suspends inactive services. Starting a new instance of the backend can take up to 5 minutes!**
+
+The application frontend is deployed at https://packlister.onrender.com with a separate backend (this project) deployed
+to `packlister-svc.onrender.com`. Still work in progress...
 
 ## Modules
 
@@ -59,23 +64,22 @@ and do not need to be manually handled.
 
 ## Authentication and authorization
 
+*Disclaimer: I realize that this configuration probably does not make sense for any real world project. More sensible
+alternative on this scale would probably be to just use Spring sessions with internal user DB. External alternatives
+could be for example AWS Cognito or Auth0, or running Keycloak or Spring Authorization Server separately.*
+
 Application is configured as a Spring OAuth 2.0 Resource Server consuming self issued JWTs. I tried out the
 newish [spring-authorization-server](https://github.com/spring-projects/spring-authorization-server) (which should get
 its `1.0.0` major release in November 2022) but it didn't really make any practical sense for this project. Configuring
 the application both as a fully-capable Authorization Server and also a Resource Server at the same time was just goofy.
-External IDPs were also an option.
 
-The setup uses self issued HS256 signed bearer tokens with the access tokens used
-"normally" on the request `Authorization` header and the refresh tokens set as a `HttpOnly` cookie on the
-auth paths.
+The setup uses self issued HS256 signed bearer tokens with the access tokens used "normally" on a request HTTP header
+and the refresh tokens set as a `HttpOnly` cookie on the auth paths.
 
 Refresh tokens are rotated automatically and their reuse will invalidate any refresh token originating from the same
 login. The original refresh token created using user credentials (username, password) is issued a random family UUID
 that is retained by all subsequent refresh tokens. If refresh token reuse is detected, then that family is no longer
 valid forcing all actors to re-authenticate. Access tokens are not revoked.
-
-I feel like the security configuration is kinda bordering on violating "don't roll your own crypto" principle with
-manual creation of tokens and manual checking of refresh tokens, but it was interesting to implement.
 
 ## Environment variables
 
