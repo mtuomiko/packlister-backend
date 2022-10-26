@@ -21,7 +21,8 @@ jobs:
           git checkout ${{ github.sha }} gen/api.yml
           rm api.yml
           mv gen/api.yml .
-          git add api.yml
+          # add both paths so the gen path file doesn't remain in git
+          git add api.yml gen/api.yml
       - name: Commit
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
