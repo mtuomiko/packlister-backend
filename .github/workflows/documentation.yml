@@ -18,6 +18,7 @@ jobs:
         run: |
           git fetch origin documentation:documentation
           git switch documentation
+          # get the updated file based on current triggering commit hash, could use branch also
           git checkout ${{ github.sha }} gen/api.yml
           rm api.yml
           mv gen/api.yml .

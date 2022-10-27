@@ -10,7 +10,8 @@ import net.packlister.packlister.model.UnauthorizedError
 import net.packlister.packlister.model.User
 import net.packlister.packlister.svc.model.TokensWithUserInfo
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.scheduling.annotation.Scheduled
+import org.springframework.boot.context.event.ApplicationStartedEvent
+import org.springframework.context.event.EventListener
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm
@@ -124,11 +125,18 @@ class AuthService(
         return TokenPair(accessToken, refreshToken)
     }
 
+    /**
+     * With current deployment setup, cron does not work (no way to trigger if instance is suspended). Instead, running
+     * on startup.
+     *
+     * Alternative for running at 02:35 server time:
+     * "@Scheduled(cron = "0 35 2 * * *")"
+     */
     @Suppress("UnusedPrivateMember")
-    @Scheduled(cron = "0 35 2 * * *")
+    @EventListener(ApplicationStartedEvent::class)
     private fun deleteExpiredRefreshTokens() {
         val deletedCount = refreshTokenDao.deleteExpired()
-        logger.info { "Periodic deletion of expired refresh tokens deleted $deletedCount occurrences" }
+        logger.info { "Deleted $deletedCount expired refresh tokens" }
     }
 
     class TokenPair(val accessToken: String, val refreshToken: String)
