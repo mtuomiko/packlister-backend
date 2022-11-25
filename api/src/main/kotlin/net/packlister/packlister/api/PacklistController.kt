@@ -54,11 +54,16 @@ class PacklistController(
     }
 
     private fun Packlist.toApiModel() = APIPacklist(
-        id, name, description, categories = categories.map { category -> category.toApiModel() }
+        id,
+        name,
+        description,
+        categories = categories.map { category -> category.toApiModel() }
     )
 
     private fun Category.toApiModel() = APICategory(
-        id, name, items = categoryItems.map { item -> item.toApiModel() }
+        id,
+        name,
+        items = categoryItems.map { item -> item.toApiModel() }
     )
 
     private fun CategoryItem.toApiModel() = APICategoryItem(userItemId, quantity)

@@ -16,7 +16,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
 
-
 private val logger = KotlinLogging.logger {}
 
 /**

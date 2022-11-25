@@ -8,7 +8,6 @@ dependencies {
     }
 
     implementation(project(":common"))
-//    implementation(project(":gen"))
     implementation(project(":svc"))
 
     // RequestBody validation with Bean Validation

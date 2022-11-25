@@ -27,6 +27,7 @@ object Libs {
 
     const val swaggerAnnotations = "io.swagger.core.v3:swagger-annotations"
     const val beanValidationApi = "jakarta.validation:jakarta.validation-api"
+
     // remove javax when generated api code module is removed
     const val javaxValidationApi = "javax.validation:jakarta.validation-api"
 

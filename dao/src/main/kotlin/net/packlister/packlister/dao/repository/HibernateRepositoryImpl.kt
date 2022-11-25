@@ -1,8 +1,8 @@
 package net.packlister.packlister.dao.repository
 
-import org.hibernate.Session
 import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
+import org.hibernate.Session
 
 /**
  * Avoiding JpaRepository save functions, based on hibernate-types Spring Repository.

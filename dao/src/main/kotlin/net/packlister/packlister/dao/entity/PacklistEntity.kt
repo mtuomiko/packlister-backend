@@ -1,6 +1,11 @@
 package net.packlister.packlister.dao.entity
 
 import com.vladmihalcea.hibernate.type.json.JsonType
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.EntityListeners
+import jakarta.persistence.Id
+import jakarta.persistence.Table
 import net.packlister.packlister.model.Category
 import net.packlister.packlister.model.Packlist
 import org.hibernate.annotations.Type
@@ -9,11 +14,6 @@ import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.Instant
 import java.util.UUID
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.EntityListeners
-import jakarta.persistence.Id
-import jakarta.persistence.Table
 
 @Entity
 @Table(name = "packlists")

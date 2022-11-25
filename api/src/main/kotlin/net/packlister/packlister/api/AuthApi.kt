@@ -14,12 +14,16 @@ import org.springframework.web.bind.annotation.RequestMapping
 interface AuthApi {
 
     @PostMapping("/register")
-    fun register(@Valid @RequestBody userRegistration: APIUserRegistration): ResponseEntity<APITokenResponse>
+    fun register(
+        @Valid @RequestBody
+        userRegistration: APIUserRegistration
+    ): ResponseEntity<APITokenResponse>
 
     @PostMapping("/token")
     fun token(
         @CookieValue(name = "refresh_token", required = false) refreshToken: String?,
-        @Valid @RequestBody(required = false) userCredentials: APIUserCredentials?
+        @Valid @RequestBody(required = false)
+        userCredentials: APIUserCredentials?
     ): ResponseEntity<APITokenResponse>
 
     @PostMapping("/logout")

@@ -17,7 +17,8 @@ interface PacklistApi {
     @PostMapping("/{id}")
     fun createPacklist(
         @PathVariable("id") id: UUID,
-        @Valid @RequestBody packlist: APIPacklist
+        @Valid @RequestBody
+        packlist: APIPacklist
     ): ResponseEntity<APIPacklist>
 
     @GetMapping
@@ -29,6 +30,7 @@ interface PacklistApi {
     @PutMapping("/{id}")
     fun updatePacklist(
         @PathVariable("id") id: UUID,
-        @Valid @RequestBody packlist: APIPacklist
+        @Valid @RequestBody
+        packlist: APIPacklist
     ): ResponseEntity<APIPacklist>
 }

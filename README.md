@@ -22,7 +22,11 @@ Actual Spring Boot application and configuration. Produces the final fat JAR fil
 
 Common configuration, and DTO models. Available to all other (application) modules.
 
-### gen
+### gen (being removed, read note)
+
+**Note! Moving away from code generation based on the spec file to the opposite, specs will be generated based on code. This
+module will probably disappear at the same time. Currently still in place so the specs and generated code can be used
+as a reference.**
 
 Generates API models and delegate pattern interfaces as Java code for the project Spring controllers (api module) to
 implement. Intent is to enforce that the actual implementation does not deviate from the API specification as the

@@ -5,7 +5,6 @@ import jakarta.validation.constraints.Size
 import net.packlister.packlister.svc.validation.Validators.alphaNumericRegexString
 import net.packlister.packlister.svc.validation.Validators.simpleEmailRegexString
 
-
 class UserRegistration(
     @field:Pattern(
         regexp = alphaNumericRegexString,
