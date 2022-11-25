@@ -1,6 +1,6 @@
 import net.packlister.packlister.api.UserItemController
-import net.packlister.packlister.generated.model.UpsertItemsRequest
-import net.packlister.packlister.generated.model.UserItem
+import net.packlister.packlister.api.model.APIUpsertItemsRequest
+import net.packlister.packlister.api.model.APIUserItem
 import net.packlister.packlister.svc.UserItemService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeAll
@@ -24,15 +24,15 @@ class UserItemControllerTest {
     @Test
     fun upsertItemsSuccessReturnsSameList() {
         val initial = listOf(
-            UserItem().apply {
-                id = UUID.randomUUID()
-                name = "foo"
-                description = "bar"
-                weight = 300
+            APIUserItem(
+                id = UUID.randomUUID(),
+                name = "foo",
+                description = "bar",
+                weight = 300,
                 publicVisibility = true
-            }
+            )
         )
-        val request = UpsertItemsRequest().userItems(initial)
+        val request = APIUpsertItemsRequest(userItems = initial)
         val result = controller.upsertItems(request)
 
         assertThat(result.body!!.userItems).containsExactlyInAnyOrderElementsOf(initial)

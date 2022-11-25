@@ -11,7 +11,7 @@ interface HibernateRepository<T> {
 
     fun <S : T> persistAllAndFlush(entities: Iterable<S>): List<S>
 
-    fun <S : T> update(entity: S): S
+    fun <S : T> merge(entity: S): S
 
     fun <S : T> updateAll(entities: Iterable<S>): List<S>
 

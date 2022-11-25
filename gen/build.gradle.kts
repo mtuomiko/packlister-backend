@@ -15,7 +15,7 @@ dependencies {
     // needed by generated code
     implementation(Libs.Spring.bootStarterWeb) // use a more limited dep?
     implementation(Libs.swaggerAnnotations)
-    implementation(Libs.javaxValidationApi)
+    implementation("${Libs.javaxValidationApi}:${Versions.javaxValidationApi}")
 }
 
 openApiGenerate {
@@ -37,15 +37,18 @@ openApiValidate {
     inputSpec.set("$projectDir/api.yml")
 }
 
+// Below removing dependency to generated code. Moving away from generated APIs due to openapi-generator not supporting
+// Jakarta EE 9 annotations required by Spring Boot 3. We can still generate code to use as a reference.
+
 // Other subproject dependencies on this project need the generated classes.
-configure<SourceSetContainer> {
-    named("main") {
-        java.srcDir("$buildDir/generated/src/main/java")
-    }
-}
+//configure<SourceSetContainer> {
+//    named("main") {
+//        java.srcDir("$buildDir/generated/src/main/java")
+//    }
+//}
 
 // Ensure that code is generated for dependents. Kinda haxy since results in class files that are not used. Somehow not
 // using java-library plugin might be a way out of this?
-tasks.compileJava {
-    dependsOn(tasks.openApiGenerate)
-}
+//tasks.compileJava {
+//    dependsOn(tasks.openApiGenerate)
+//}

@@ -20,7 +20,7 @@ dependencies {
         // override mockito version due to mockito-kotlin using an older version
         // improve: ^ not actually working, figure out
         api("${Libs.mockitoCore}:${Versions.mockito}")
-        api("${Libs.mockitoKotlin}:${Versions.mockito}")
+        api("${Libs.mockitoKotlin}:${Versions.mockitoKotlin}")
 
         api("${Libs.swaggerAnnotations}:${Versions.swaggerAnnotations}")
 

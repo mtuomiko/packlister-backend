@@ -1,7 +1,7 @@
 package net.packlister.packlister.api
 
-import net.packlister.packlister.generated.model.APIError
-import net.packlister.packlister.generated.model.ErrorWrapper
+import net.packlister.packlister.api.model.APIError
+import net.packlister.packlister.api.model.APIErrorResponse
 import net.packlister.packlister.model.BadRequestError
 import net.packlister.packlister.model.ConflictError
 import net.packlister.packlister.model.CustomError
@@ -19,15 +19,17 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 class GlobalExceptionHandler {
 
     @ExceptionHandler
-    fun handle(error: CustomError): ResponseEntity<ErrorWrapper> {
+    fun handle(error: CustomError): ResponseEntity<APIErrorResponse> {
         val statusCode = getHttpStatus(error)
         val apiErrors = error.innerErrors?.map { it.toApiError() }
 
         return ResponseEntity(
-            ErrorWrapper()
-                .message(error.message)
-                .status(statusCode.value())
-                .errors(apiErrors),
+            APIErrorResponse(
+                status = statusCode.value(),
+                message = error.message,
+                errors = apiErrors
+
+            ),
             statusCode
         )
     }
@@ -44,4 +46,4 @@ class GlobalExceptionHandler {
     }
 }
 
-private fun InnerError.toApiError(): APIError = APIError().message(this.message).target(this.target)
+private fun InnerError.toApiError(): APIError = APIError(message, target)

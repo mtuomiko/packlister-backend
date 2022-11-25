@@ -1,8 +1,8 @@
 package net.packlister.packlister.dao.repository
 
 import org.hibernate.Session
-import javax.persistence.EntityManager
-import javax.persistence.PersistenceContext
+import jakarta.persistence.EntityManager
+import jakarta.persistence.PersistenceContext
 
 /**
  * Avoiding JpaRepository save functions, based on hibernate-types Spring Repository.
@@ -31,12 +31,12 @@ class HibernateRepositoryImpl<T>(
         return result
     }
 
-    override fun <S : T> update(entity: S): S {
-        session().update(entity)
+    override fun <S : T> merge(entity: S): S {
+        session().merge(entity)
         return entity
     }
 
-    override fun <S : T> updateAll(entities: Iterable<S>) = entities.map { update(it) }
+    override fun <S : T> updateAll(entities: Iterable<S>) = entities.map { merge(it) }
 
     // improve: batch size operations with flush?
 

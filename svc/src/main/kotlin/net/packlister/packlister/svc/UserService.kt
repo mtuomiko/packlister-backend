@@ -1,5 +1,6 @@
 package net.packlister.packlister.svc
 
+import jakarta.validation.Validator
 import mu.KotlinLogging
 import net.packlister.packlister.dao.UserDao
 import net.packlister.packlister.dao.model.NewUser
@@ -14,7 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
-import javax.validation.Validator
+
 
 private val logger = KotlinLogging.logger {}
 

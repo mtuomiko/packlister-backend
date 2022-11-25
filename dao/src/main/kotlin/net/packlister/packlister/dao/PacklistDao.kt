@@ -54,9 +54,8 @@ class PacklistDao(
         if (existingPacklist.userId != userId) {
             throw ForbiddenError("not allowed to modify packlists of other users")
         }
-        packlistRepository.session().clear() // clear existing entity from session
         val entity = packlist.toEntity(userId)
-        return packlistRepository.update(entity).toModel()
+        return packlistRepository.merge(entity).toModel()
     }
 
     private fun Packlist.toEntity(userId: UUID) = with(this) {

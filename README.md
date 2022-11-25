@@ -117,7 +117,7 @@ var `SPRING_PROFILES_ACTIVE=local`.
 ### Containerized
 
 The image is built using [`Dockerfile`](Dockerfile). [jib](https://github.com/GoogleContainerTools/jib) would probably
-make a lot more sense for building the image but render.com deployment forces our hand.
+make a lot more sense for building the image due to incremental build steps but using render.com deployment kinda forces our hand, or at least makes it difficult to use *jib*.
 
 File [`.env.dev`](.env.dev) has an example of needed env vars for running the image. Database host (example
 uses `host.docker.internal`) might vary depending on your setup.

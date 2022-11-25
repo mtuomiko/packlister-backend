@@ -1,8 +1,10 @@
 package net.packlister.packlister.api
 
-import net.packlister.packlister.generated.api.PacklistsApiDelegate
-import net.packlister.packlister.generated.model.GetAllPacklists200Response
-import net.packlister.packlister.generated.model.PacklistLimitedView
+import net.packlister.packlister.api.model.APICategory
+import net.packlister.packlister.api.model.APICategoryItem
+import net.packlister.packlister.api.model.APIPacklist
+import net.packlister.packlister.api.model.APIPacklistLimitedView
+import net.packlister.packlister.api.model.APIPacklistsLimitedResponse
 import net.packlister.packlister.model.Category
 import net.packlister.packlister.model.CategoryItem
 import net.packlister.packlister.model.Packlist
@@ -12,24 +14,21 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
-import net.packlister.packlister.generated.model.Category as APICategory
-import net.packlister.packlister.generated.model.CategoryItem as APICategoryItem
-import net.packlister.packlister.generated.model.Packlist as APIPacklist
 
 @RestController
 class PacklistController(
     @Autowired
     private val packlistService: PacklistService
-) : PacklistsApiDelegate {
-    override fun getAllPacklists(): ResponseEntity<GetAllPacklists200Response> {
+) : PacklistApi {
+    override fun getAllUserPacklists(): ResponseEntity<APIPacklistsLimitedResponse> {
         val packlists = packlistService.getPacklists()
         val apiPacklists = packlists.map {
-            PacklistLimitedView().apply {
-                id = it.id
+            APIPacklistLimitedView(
+                id = it.id,
                 name = it.name
-            }
+            )
         }
-        return ResponseEntity.ok(GetAllPacklists200Response().packlists(apiPacklists))
+        return ResponseEntity.ok(APIPacklistsLimitedResponse(packlists = apiPacklists))
     }
 
     override fun getPacklist(id: UUID): ResponseEntity<APIPacklist> {
@@ -54,23 +53,15 @@ class PacklistController(
         return ResponseEntity.ok(updatedPacklist.toApiModel())
     }
 
-    private fun Packlist.toApiModel() = APIPacklist().also {
-        it.id = id
-        it.name = name
-        it.description = description
-        it.categories = categories.map { category -> category.toApiModel() }
-    }
+    private fun Packlist.toApiModel() = APIPacklist(
+        id, name, description, categories = categories.map { category -> category.toApiModel() }
+    )
 
-    private fun Category.toApiModel() = APICategory().also {
-        it.id = id
-        it.name = name
-        it.items = categoryItems.map { item -> item.toApiModel() }
-    }
+    private fun Category.toApiModel() = APICategory(
+        id, name, items = categoryItems.map { item -> item.toApiModel() }
+    )
 
-    private fun CategoryItem.toApiModel() = APICategoryItem().also {
-        it.userItemId = userItemId
-        it.quantity = quantity
-    }
+    private fun CategoryItem.toApiModel() = APICategoryItem(userItemId, quantity)
 
     private fun APIPacklist.toModel() = Packlist(
         this.id,

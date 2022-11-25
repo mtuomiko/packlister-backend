@@ -1,5 +1,6 @@
 package net.packlister.packlister.dao
 
+import jakarta.transaction.Transactional
 import mu.KotlinLogging
 import net.packlister.packlister.dao.entity.RefreshTokenEntity
 import net.packlister.packlister.dao.model.RefreshToken
@@ -8,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.time.InstantSource
 import java.util.UUID
-import javax.transaction.Transactional
 
 private val logger = KotlinLogging.logger {}
 
