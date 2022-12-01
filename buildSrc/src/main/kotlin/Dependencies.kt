@@ -29,7 +29,9 @@ object Libs {
     const val beanValidationApi = "jakarta.validation:jakarta.validation-api"
 
     // remove javax when generated api code module is removed
-    const val javaxValidationApi = "javax.validation:jakarta.validation-api"
+    const val javaxValidationApi = "javax.validation:validation-api"
+
+    const val springdocOpenApiStarterWebMvc = "org.springdoc:springdoc-openapi-starter-webmvc-api"
 
     const val mockitoCore = "org.mockito:mockito-core"
     const val mockitoKotlin = "org.mockito.kotlin:mockito-kotlin"
@@ -45,11 +47,13 @@ object Versions {
     const val openApiGenerator = "6.2.1"
     const val swaggerAnnotations = "2.2.7"
 
+    const val springdocOpenApiStarterWebMvc = "2.0.0"
+
     const val microutilsKotlinLogging = "3.0.4"
 
-    const val detekt = "1.21.0"
-    const val spotless = "6.10.0"
-    const val ktlint = "0.46.1"
+    const val detekt = "1.22.0" // TODO: check the new rules introduced in 1.21 -> 1.22
+    const val spotless = "6.12.0"
+    const val ktlint = "0.47.1"
 
     // this version not published yet, check again in a few days(?)
 //    const val mockito = "4.5.1"
@@ -58,7 +62,9 @@ object Versions {
     const val mockitoKotlin = "4.0.0"
 
     // remove javax when generated api code module is removed
-    const val javaxValidationApi = "2.0.2"
+    const val javaxValidationApi = "2.0.1.Final"
+
+    const val springdocOpenApiGradle = "1.5.0"
 }
 
 object Plugins {
@@ -67,7 +73,9 @@ object Plugins {
     const val detekt = "io.gitlab.arturbosch.detekt"
     const val spotless = "com.diffplug.spotless"
     const val jacocoReportAggregation = "jacoco-report-aggregation"
+
     const val openApiGenerator = "org.openapi.generator"
+    const val springdocOpenApiGradle = "org.springdoc.openapi-gradle-plugin"
 }
 
 object Target {

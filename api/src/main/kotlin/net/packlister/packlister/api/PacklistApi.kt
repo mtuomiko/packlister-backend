@@ -1,5 +1,6 @@
 package net.packlister.packlister.api
 
+import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import net.packlister.packlister.api.model.APIPacklist
 import net.packlister.packlister.api.model.APIPacklistsLimitedResponse
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import java.util.UUID
 
 @RequestMapping("/api/packlists")
+@Tag(name = "packlists", description = "Operations for handling packlists")
 interface PacklistApi {
     @PostMapping("/{id}")
     fun createPacklist(

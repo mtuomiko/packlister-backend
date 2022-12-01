@@ -29,3 +29,6 @@ logging:
         security: DEBUG
         web:
           cors: DEBUG
+springdoc:
+  api-docs:
+    enabled: true # allow serving generated api specs to save the yml file

@@ -13,5 +13,7 @@ dependencies {
     // RequestBody validation with Bean Validation
     implementation(Libs.Spring.bootStarterValidation)
 
+    implementation(Libs.swaggerAnnotations)
+
     implementation("org.springframework.security:spring-security-oauth2-jose")
 }

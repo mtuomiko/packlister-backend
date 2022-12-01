@@ -58,6 +58,7 @@ class SecurityConfig(
             authorizeRequests {
                 // auth route endpoints are either public or depend on manual refresh token verification
                 authorize("/api/auth/*", permitAll)
+                authorize("/api-docs/**", permitAll)
                 authorize("/actuator/health", permitAll)
                 authorize(anyRequest, authenticated)
             }

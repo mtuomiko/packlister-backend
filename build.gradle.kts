@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-    jacocoAggregation(project(":app")) // use app as entrypoint for aggregation
+    jacocoAggregation(project(":app")) // use main Spring application module as entrypoint for aggregation
 }
 
 reporting {

@@ -1,5 +1,6 @@
 package net.packlister.packlister.api
 
+import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import net.packlister.packlister.api.model.APITokenResponse
 import net.packlister.packlister.api.model.APIUserCredentials
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 
 @RequestMapping("/api/auth")
+@Tag(name = "auth", description = "User registration, login, token refresh and logout functionality")
 interface AuthApi {
 
     @PostMapping("/register")
@@ -21,8 +23,10 @@ interface AuthApi {
 
     @PostMapping("/token")
     fun token(
-        @CookieValue(name = "refresh_token", required = false) refreshToken: String?,
-        @Valid @RequestBody(required = false)
+        @CookieValue(name = "refresh_token", required = false)
+        refreshToken: String?,
+        @Valid
+        @RequestBody(required = false)
         userCredentials: APIUserCredentials?
     ): ResponseEntity<APITokenResponse>
 

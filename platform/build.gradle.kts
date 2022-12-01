@@ -24,6 +24,8 @@ dependencies {
 
         api("${Libs.swaggerAnnotations}:${Versions.swaggerAnnotations}")
 
+        api("${Libs.springdocOpenApiStarterWebMvc}:${Versions.springdocOpenApiStarterWebMvc}")
+
         api("${Libs.hibernateTypes}:${Versions.hibernateTypes}")
 
         api("${Libs.microutilsKotlinLogging}:${Versions.microutilsKotlinLogging}")
