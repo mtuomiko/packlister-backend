@@ -1,0 +1,18 @@
+greeting:
+  message: "hello"
+quarkus:
+  http:
+    port: 8081
+  datasource:
+    db-kind: "postgresql"
+    db-version: "15"
+    jdbc:
+      url: "jdbc:postgresql://host.docker.internal:5432/packlister"
+    username: "postgres"
+    password: "Hunter2"
+  flyway:
+    migrate-at-start: true
+    default-schema: "packlister"
+  jooq:
+    dialect: "POSTGRES_15"
+
